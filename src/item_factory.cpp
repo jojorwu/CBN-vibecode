@@ -635,9 +635,7 @@ void Item_factory::finalize_pre( itype &obj )
         };
         set_resist( DT_BASH, &material_type::bash_resist );
         set_resist( DT_CUT, &material_type::cut_resist );
-        set_resist( DT_STAB, []( const material_type & t ) {
-            return t.cut_resist() * 0.8f;
-        } );
+        set_resist( DT_STAB, []( const material_type & t ) { return static_cast<int>( t.cut_resist() * 0.8f ); } );
         set_resist( DT_BULLET, &material_type::bullet_resist );
     }
 }

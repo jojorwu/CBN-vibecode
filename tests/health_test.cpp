@@ -21,7 +21,7 @@ static void test_diet(
                 hmod_changes_per_day[index], sgn(hmod_changes_per_day[index]) * 200);
             // And update health every 30m over the 6h period
             for (time_duration n = 0_turns; n < 6_hours; n += 30_minutes) { dude.update_health(); }
-            health_samples.emplace_back(dude.get_healthy());
+            health_samples.emplace_back(static_cast<int>(dude.get_healthy()));
         }
     }
 

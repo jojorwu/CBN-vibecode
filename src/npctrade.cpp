@@ -60,14 +60,14 @@ std::vector<item_pricing> npc_trading::init_selling( npc &np )
         const auto price = it.price( true );
         auto val = np.value( it );
         if( np.wants_to_sell( it, val, price ) ) {
-            result.emplace_back( *i, val, static_cast<int>( i->size() ) );
+            result.emplace_back( *i, static_cast<float>( val ), static_cast<int>( i->size() ) );
         }
     } );
 
     if( np.will_exchange_items_freely() ) {
         std::ranges::for_each( np.wielded_items(), [&]( auto * weapon ) {
             if( !weapon->has_flag( json_flag_NO_UNWIELD ) ) {
-                result.emplace_back( std::vector<item *> { weapon }, np.value( *weapon ), 0 );
+                result.emplace_back( std::vector<item *> { weapon }, static_cast<float>( np.value( *weapon ) ), 0 );
             }
         } );
     }
@@ -133,7 +133,7 @@ std::vector<item_pricing> npc_trading::init_buying( Character &buyer, Character 
         int val = np.value( it, market_price );
         if( ( is_npc && np.wants_to_sell( it, val, market_price ) ) ||
             np.wants_to_buy( it, val, market_price ) ) {
-            result.emplace_back( locs, val, count );
+            result.emplace_back( locs, static_cast<float>( val ), count );
             result.back().adjust_values( adjust, fac );
         }
     };

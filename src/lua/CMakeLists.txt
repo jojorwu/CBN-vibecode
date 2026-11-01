@@ -13,6 +13,10 @@ target_include_directories(liblua SYSTEM PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 set_target_properties(liblua PROPERTIES LINKER_LANGUAGE CXX)
 
 # Silence all errors. It's C code being compiled as C++, there're lots of them.
+# MSVC warns (D9025) when -w overrides the global /W1, so drop it for this directory.
+if (MSVC)
+    string(REPLACE "/W1" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+endif ()
 target_compile_options(liblua PRIVATE -w)
 
 install(TARGETS liblua LIBRARY DESTINATION ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})

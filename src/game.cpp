@@ -409,6 +409,22 @@ auto can_recover_from_fling( Creature &critter ) -> bool
     return false;
 }
 
+/// Whether the player-dependent inputs of the visibility cache differ. Map-side inputs
+/// (lightmap, seen, camera and transparency caches, player position) dirty it on their own.
+auto visibility_inputs_changed( const visibility_variables &a, const visibility_variables &b ) -> bool
+{
+    return a.variables_set != b.variables_set
+           || a.u_sight_impaired != b.u_sight_impaired
+           || a.u_is_boomered != b.u_is_boomered
+           || a.g_light_level != b.g_light_level
+           || a.u_clairvoyance != b.u_clairvoyance
+           || a.u_unimpaired_range != b.u_unimpaired_range
+           || a.vision_threshold != b.vision_threshold
+           || a.visibility_range != b.visibility_range
+           || a.detail_range != b.detail_range
+           || a.visibility_scale_factor != b.visibility_scale_factor;
+}
+
 } // namespace
 
 static const bionic_id bio_remote( "bio_remote" );
@@ -2142,11 +2158,15 @@ bool game::do_turn()
     // Reset dimension swap flag now that the map is fully loaded and turn is processing
     swapping_dimensions = false;
 
-    // Mark visibility dirty for this turn. Lightmap dirtiness is derived from
-    // dynamic light state in build_map_cache and from explicit map mutations.
+    // Mark visibility dirty only when the player's vision changed. Lightmap dirtiness is derived
+    // from dynamic light state in build_map_cache and from explicit map mutations, and those
+    // paths (plus seen cache rebuilds on player movement) dirty the visibility cache themselves.
     {
         ZoneScopedN( "do_turn_invalidate_visibility" );
-        m.invalidate_visibility_caches();
+        if( visibility_inputs_changed( m.make_visibility_variables( u.bub_pos().z() ),
+                                       m.get_visibility_variables_cache() ) ) {
+            m.invalidate_visibility_caches();
+        }
         mon_info_cache_dirty = true;
     }
 

@@ -5089,10 +5089,10 @@ int gps_device_actor::use( player &p, item &it, bool, const tripoint_bub_ms & ) 
     params.search_layers  = omt_find_above_ground_layer;
     params.explored       = false;
     if( it.has_flag( flag_USE_UPS ) ) {
-        params.max_results = static_cast<size_t>( 1 + p.charges_of( itype_UPS ) /
+        params.max_results = static_cast<int>( 1 + p.charges_of( itype_UPS ) /
                              additional_charges_per_tile );
     } else {
-        params.max_results = static_cast<size_t>( 1 + it.ammo_remaining() / additional_charges_per_tile );
+        params.max_results = static_cast<int>( 1 + it.ammo_remaining() / additional_charges_per_tile );
     }
     params.popup          = make_shared_fast<throbber_popup>( _( "Searching…" ) );
 

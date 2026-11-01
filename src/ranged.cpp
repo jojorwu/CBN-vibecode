@@ -2107,7 +2107,7 @@ static int print_ranged_chance( const catacurses::window &w, int line_number,
     std::string display_type = get_option<std::string>( "ACCURACY_DISPLAY" );
     std::string panel_type = panel_manager::get_manager().get_current_layout_id();
     const int bars_pad = 3; // Padding for "bars" to fit moves_to_fire value.
-    if( ( panel_type == "compact" || panel_type == "labels-narrow" ) && display_type != "numbers" ) {
+    if( is_narrow_layout( panel_type ) && display_type != "numbers" ) {
         window_width -= bars_pad;
     }
 
@@ -2120,7 +2120,7 @@ static int print_ranged_chance( const catacurses::window &w, int line_number,
     if( display_type != "numbers" ) {
         std::string symbols;
         int column_number = 1;
-        if( !( panel_type == "compact" || panel_type == "labels-narrow" ) ) {
+        if( !is_narrow_layout( panel_type ) ) {
             std::string label = _( "Symbols:" );
             mvwprintw( w, point( column_number, line_number ), label );
             column_number += utf8_width( label ) + 1; // 1 for whitespace after 'Symbols:'
@@ -2139,7 +2139,7 @@ static int print_ranged_chance( const catacurses::window &w, int line_number,
         }
         line_number++;
     }
-    if( ( panel_type == "compact" || panel_type == "labels-narrow" ) && display_type == "numbers" ) {
+    if( is_narrow_layout( panel_type ) && display_type == "numbers" ) {
         std::string symbols = _( " <color_green>Great</color> - <color_light_gray>Normal</color>"
                                  " - <color_magenta>Graze</color> - <color_light_blue>Moves</color>" );
         fold_and_print( w, point( 1, line_number++ ), window_width + bars_pad,
@@ -2169,7 +2169,7 @@ static int print_ranged_chance( const catacurses::window &w, int line_number,
         int moves_to_fire = cost_fun( type );
 
         auto hotkey = front_or( type.action.empty() ? "FIRE" : type.action, ' ' );
-        if( ( panel_type == "compact" || panel_type == "labels-narrow" ) ) {
+        if( is_narrow_layout( panel_type ) ) {
             if( display_type == "numbers" ) {
                 t_aims[aim_iter] = string_format( "<color_dark_gray>%s:</color>", label );
                 t_confidence[( aim_iter * 4 ) + 3] = string_format( "<color_light_blue>%d</color>", moves_to_fire );
@@ -2189,7 +2189,7 @@ static int print_ranged_chance( const catacurses::window &w, int line_number,
         double confidence = confidence_estimate( range, target_size, current_dispersion );
 
         if( display_type == "numbers" ) {
-            if( panel_type == "compact" || panel_type == "labels-narrow" ) {
+            if( is_narrow_layout( panel_type ) ) {
                 int last_chance = 0;
                 for( const confidence_rating &cr : confidence_config ) {
                     int chance = std::min<int>( 100, 100.0 * ( cr.aim_level ) * confidence ) - last_chance;
@@ -2231,7 +2231,7 @@ static int print_ranged_chance( const catacurses::window &w, int line_number,
     }
 
     // Draw tables for compact Numbers display
-    if( ( panel_type == "compact" || panel_type == "labels-narrow" )
+    if( is_narrow_layout( panel_type )
         && display_type == "numbers" ) {
         const std::string divider = "|";
         int left_pad = 10, columns = 4;
@@ -3246,7 +3246,7 @@ void target_ui::init_window_and_input()
 {
     std::string display_type = get_option<std::string>( "ACCURACY_DISPLAY" );
     std::string panel_type = panel_manager::get_manager().get_current_layout_id();
-    narrow = ( panel_type == "compact" || panel_type == "labels-narrow" );
+    narrow = is_narrow_layout( panel_type );
 
     int top = 0;
     int width;
@@ -3541,7 +3541,7 @@ void target_ui::update_target_list()
     map &here = get_map();
     const auto player_pos = you->bub_pos();
 
-    std::ranges::sort( targets, {}, [&]( const Creature * c ) -> std::tuple<bool, bool, bool, int> {
+    std::ranges::sort( targets, {}, [&]( const Creature * c ) -> std::tuple<bool, bool, int, float> {
         const auto target_pos = c->bub_pos();
         const auto z_diff = std::abs( player_pos.z() - target_pos.z() );
         const auto is_hostile = c->attitude_to( *you ) == Attitude::A_HOSTILE;

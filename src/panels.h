@@ -35,6 +35,9 @@ void draw_overmap_chunk( const catacurses::window &w_minimap, const avatar &you,
 
 bool default_render();
 
+/// Whether the sidebar layout is 32 cells wide (compact, labels-narrow, icons).
+auto is_narrow_layout( const std::string &layout_id ) -> bool;
+
 class window_panel
 {
     public:

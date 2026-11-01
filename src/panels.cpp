@@ -43,9 +43,11 @@
 #include "sounds.h"
 #include "string_formatter.h"
 #include "string_id.h"
+#include "string_utils.h"
 #include "tileray.h"
 #include "translations.h"
 #include "type_id.h"
+#include "ui_icons.h"
 #include "ui_manager.h"
 #include "units.h"
 #include "units_utility.h"
@@ -2397,6 +2399,293 @@ static void draw_mana_wide( const player &u, const catacurses::window &w )
 }
 
 // ============
+// ICONS LAYOUT
+// ============
+
+namespace
+{
+
+constexpr auto meter_full = "█";
+constexpr auto meter_empty = "░";
+
+/// Width of one of the two columns in the 32-cell icons layout.
+constexpr auto icon_column_width = 16;
+/// Offset of the text following an icon: the icon cells plus a gap.
+constexpr auto icon_text_offset = ui_icons::cell_width + 1;
+
+/// Draws a sidebar icon (sprite in tiles, glyph otherwise); dark gray dims it.
+auto draw_icon( const catacurses::window &w, const point &pos, const ui_icon icon,
+                const nc_color &color ) -> void
+{
+    mvwprintz( w, pos, color, ui_icons::text( icon ) );
+}
+
+struct meter_options {
+    point pos;
+    int cur = 0;
+    int max = 1;
+    int width = 8;
+    nc_color color = c_light_gray;
+};
+
+auto repeat_glyph( const std::string &glyph, const int count ) -> std::string
+{
+    auto ret = std::string{};
+    for( auto i = 0; i < count; ++i ) {
+        ret += glyph;
+    }
+    return ret;
+}
+
+/// Draws a solid `█░` meter, rounding up so any non-zero value shows at least one cell.
+auto draw_meter( const catacurses::window &w, const meter_options &opts ) -> void
+{
+    const auto rounded_up = opts.max > 0 ? ( opts.cur * opts.width + opts.max - 1 ) / opts.max : 0;
+    const auto filled = std::clamp( rounded_up, 0, opts.width );
+    mvwprintz( w, opts.pos, opts.color, repeat_glyph( meter_full, filled ) );
+    wprintz( w, c_dark_gray, repeat_glyph( meter_empty, opts.width - filled ) );
+}
+
+struct icon_entry_options {
+    point pos;
+    ui_icon icon = ui_icon::health;
+    std::string text;
+    nc_color color = c_light_gray;
+    int width = icon_column_width;
+};
+
+/// Draws `icon text`; an empty text dims the icon so idle states stay quiet.
+auto draw_icon_entry( const catacurses::window &w, const icon_entry_options &opts ) -> void
+{
+    draw_icon( w, opts.pos, opts.icon, opts.text.empty() ? c_dark_gray : opts.color );
+    if( !opts.text.empty() ) {
+        mvwprintz( w, opts.pos + point( icon_text_offset, 0 ), opts.color,
+                   utf8_truncate( opts.text, std::max( opts.width - icon_text_offset - 1, 0 ) ) );
+    }
+}
+
+auto draw_limbs_icons( avatar &u, const catacurses::window &w ) -> void
+{
+    werase( w );
+    auto i = 0;
+    for( const bodypart_id &bp : u.get_all_body_parts( true ) ) {
+        const auto pos = point( ( i % 2 ) * icon_column_width, i / 2 );
+        const auto broken = u.is_limb_broken( bp.id() ) && !bp->essential;
+        draw_icon( w, pos, ui_icon::health, broken ? c_dark_gray : c_red );
+        mvwprintz( w, pos + point( icon_text_offset, 0 ), u.limb_color( bp.id(), true, true, true ),
+                   left_justify( body_part_hp_bar_ui_text( bp.id() ), 5 ) + " " );
+        draw_limb_health( u, w, bp.id() );
+        i++;
+    }
+    wnoutrefresh( w );
+}
+
+auto draw_status_icons( avatar &u, const catacurses::window &w ) -> void
+{
+    werase( w );
+
+    const auto stamina = get_hp_bar( u.get_stamina(), u.get_stamina_max() );
+    draw_icon( w, point_zero, ui_icon::stamina, stamina.second );
+    const auto stamina_pos = point( icon_text_offset, 0 );
+    if( get_option<std::string>( "HEALTH_STYLE" ) == "number" ) {
+        mvwprintz( w, stamina_pos, stamina.second, "%d", u.get_stamina() );
+    } else {
+        draw_meter( w, {
+            .pos = stamina_pos, .cur = u.get_stamina(), .max = u.get_stamina_max(),
+            .color = stamina.second
+        } );
+    }
+
+    draw_icon( w, point( 12, 0 ), ui_icon::speed, c_light_gray );
+    mvwprintz( w, point( 12 + icon_text_offset, 0 ), focus_color( u.get_speed() ), "%d",
+               u.get_speed() );
+
+    const auto morale = morale_stat( u );
+    const auto horizontal = get_option<std::string>( "MORALE_STYLE" ) == "horizontal";
+    draw_icon( w, point( 20, 0 ), ui_icon::mood, morale.first );
+    mvwprintz( w, point( 20 + icon_text_offset, 0 ), morale.first,
+               morale_emotion( morale.second, get_face_type( u ), horizontal ) );
+
+    const auto safe_active = g->safe_mode != SAFE_MODE_OFF || get_option<bool>( "AUTOSAFEMODE" );
+    draw_icon( w, point( 30, 0 ), ui_icon::safe, safe_active ? safe_color() : c_dark_gray );
+
+    draw_icon( w, point_south, ui_icon::focus, focus_color( u.focus_pool ) );
+    mvwprintz( w, point( icon_text_offset, 1 ), focus_color( u.focus_pool ), "%d", u.focus_pool );
+    const auto focus_target = character_effects::calc_focus_equilibrium( u );
+    const auto focus_x = icon_text_offset + get_int_digits( u.focus_pool );
+    if( u.focus_pool < focus_target ) {
+        mvwprintz( w, point( focus_x, 1 ), c_light_green, "↑" );
+    } else if( u.focus_pool > focus_target ) {
+        mvwprintz( w, point( focus_x, 1 ), c_light_red, "↓" );
+    }
+
+    const auto pwr = power_stat( u );
+    draw_icon_entry( w, {
+        .pos = point( 9, 1 ), .icon = ui_icon::power, .text = u.has_max_power() ? pwr.second : "",
+        .color = pwr.first, .width = 11
+    } );
+
+    const auto move_color = move_mode_color( u );
+    mvwprintz( w, point( 21, 1 ), move_color, move_mode_string( u ) );
+    mvwprintz( w, point( 23, 1 ), move_color, "%d", u.movecounter );
+
+    wnoutrefresh( w );
+}
+
+auto draw_mana_icons( const player &u, const catacurses::window &w ) -> void
+{
+    werase( w );
+    const auto mana = mana_stat( u );
+    const auto max_mana = u.magic->max_mana( u );
+    draw_icon( w, point_zero, ui_icon::mana, mana.first );
+    draw_meter( w, {
+        .pos = point( icon_text_offset, 0 ), .cur = u.magic->available_mana(), .max = max_mana,
+        .width = 11, .color = mana.first
+    } );
+    mvwprintz( w, point( 15, 0 ), mana.first, "%s", mana.second );
+    wprintz( w, c_dark_gray, "/" );
+    wprintz( w, c_light_blue, "%d", max_mana );
+    wnoutrefresh( w );
+}
+
+auto draw_needs_icons( const avatar &u, const catacurses::window &w ) -> void
+{
+    werase( w );
+    const auto hunger = u.get_hunger_description();
+    const auto thirst = u.get_thirst_description();
+    const auto rest = u.get_fatigue_description();
+    const auto pain = u.get_pain_description();
+
+    draw_icon_entry( w, {
+        .pos = point_zero, .icon = ui_icon::hunger, .text = hunger.first, .color = hunger.second
+    } );
+    draw_icon_entry( w, {
+        .pos = point( icon_column_width, 0 ), .icon = ui_icon::thirst, .text = thirst.first,
+        .color = thirst.second
+    } );
+    draw_icon_entry( w, {
+        .pos = point_south, .icon = ui_icon::rest, .text = rest.first, .color = rest.second
+    } );
+    draw_icon_entry( w, {
+        .pos = point( icon_column_width, 1 ), .icon = ui_icon::pain, .text = pain.first,
+        .color = pain.second
+    } );
+
+    const auto temp = temp_stat( u );
+    const auto arrow = temp_delta_arrows( u );
+    const auto arrow_text = arrow.second == "-" ? std::string{} : trim( arrow.second );
+    // The arrow takes the column gap reserved by draw_icon_entry.
+    const auto temp_width = icon_column_width + 1 - utf8_width( arrow_text );
+    draw_icon_entry( w, {
+        .pos = point( 0, 2 ), .icon = ui_icon::heat, .text = temp.second, .color = temp.first,
+        .width = temp_width
+    } );
+    wprintz( w, arrow.first, arrow_text );
+
+    if( u.is_deaf() ) {
+        draw_icon_entry( w, {
+            .pos = point( icon_column_width, 2 ), .icon = ui_icon::sound, .text = _( "Deaf!" ),
+            .color = c_red
+        } );
+    } else {
+        draw_icon_entry( w, {
+            .pos = point( icon_column_width, 2 ), .icon = ui_icon::sound, .text = get_sound( u ),
+            .color = c_yellow
+        } );
+    }
+    wnoutrefresh( w );
+}
+
+auto draw_location_icons( const avatar &u, const catacurses::window &w ) -> void
+{
+    werase( w );
+    const auto width = getmaxx( w );
+    const auto &cur_ter = ACTIVE_OVERMAP_BUFFER.ter( u.abs_omt_pos() );
+    draw_icon_entry( w, {
+        .pos = point_zero, .icon = ui_icon::place, .text = cur_ter->get_name(), .color = c_white,
+        .width = width
+    } );
+
+    if( g->get_levz() < 0 ) {
+        draw_icon_entry( w, {
+            .pos = point_south, .icon = ui_icon::underground, .text = _( "Underground" )
+        } );
+    } else {
+        const auto &weather = get_weather().weather_id;
+        draw_icon_entry( w, {
+            .pos = point_south, .icon = ui_icon::sky, .text = weather->name.translated(),
+            .color = weather->color
+        } );
+    }
+    const auto ll = get_light_level( character_funcs::fine_detail_vision_mod( get_avatar() ) );
+    draw_icon_entry( w, {
+        .pos = point( icon_column_width, 1 ), .icon = ui_icon::light, .text = ll.first,
+        .color = ll.second
+    } );
+
+    const auto time_text = u.has_watch() ? to_string_time_of_day( calendar::turn )
+                           : g->get_levz() >= 0 ? time_approx()
+                           // NOLINTNEXTLINE(cata-text-style): not a sentence-ending question mark
+                           : std::string( "???" );
+    draw_icon_entry( w, { .pos = point( 0, 2 ), .icon = ui_icon::time, .text = time_text } );
+    //~ Short sidebar date: season name, day of season (e.g. "Spring 3"); keep within 12 cells
+    const auto date_text = string_format( _( "%s %d" ),
+                                          calendar::name_season( season_of_year( calendar::turn ) ),
+                                          day_of_season<int>( calendar::turn ) + 1 );
+    draw_icon_entry( w, {
+        .pos = point( icon_column_width, 2 ), .icon = ui_icon::date, .text = date_text
+    } );
+    wnoutrefresh( w );
+}
+
+auto draw_weapon_icons( const avatar &u, const catacurses::window &w ) -> void
+{
+    werase( w );
+    const auto width = getmaxx( w );
+    draw_icon( w, point_zero, ui_icon::weapon, c_light_gray );
+    trim_and_print( w, point( icon_text_offset, 0 ), width - icon_text_offset, c_light_gray,
+                    character_funcs::fmt_wielded_weapon( u ) );
+    draw_icon_entry( w, {
+        .pos = point_south, .icon = ui_icon::style,
+        .text = u.martial_arts_data->selected_style_name( u ), .width = width
+    } );
+    wnoutrefresh( w );
+}
+
+auto load_color( const double ratio, const double warn, const double danger ) -> nc_color
+{
+    if( ratio > danger ) {
+        return c_red;
+    }
+    return ratio > warn ? c_yellow : c_light_gray;
+}
+
+auto draw_weightvolume_icons( const avatar &u, const catacurses::window &w ) -> void
+{
+    werase( w );
+    const auto weight_ratio = static_cast<double>( to_gram( u.weight_carried() ) ) /
+                              std::max<double>( to_gram( u.weight_capacity() ), 1.0 );
+    const auto volume_ratio = static_cast<double>( to_milliliter( u.volume_carried() ) ) /
+                              std::max<double>( to_milliliter( u.volume_capacity() ), 1.0 );
+    draw_icon_entry( w, {
+        .pos = point_zero, .icon = ui_icon::weight, .text = carry_weight_string( u ),
+        .color = load_color( weight_ratio, 0.75, 1.0 )
+    } );
+    draw_icon_entry( w, {
+        .pos = point( icon_column_width, 0 ), .icon = ui_icon::volume,
+        .text = carry_volume_string( u ), .color = load_color( volume_ratio, 0.65, 0.85 )
+    } );
+    wnoutrefresh( w );
+}
+
+} // namespace
+
+auto is_narrow_layout( const std::string &layout_id ) -> bool
+{
+    return layout_id == "compact" || layout_id == "labels-narrow" || layout_id == "icons";
+}
+
+// ============
 // INITIALIZERS
 // ============
 
@@ -2572,9 +2861,45 @@ static std::vector<window_panel> initialize_default_label_panels()
     return ret;
 }
 
+namespace
+{
+
+auto initialize_default_icons_panels() -> std::vector<window_panel>
+{
+    auto ret = std::vector<window_panel> {};
+
+    ret.emplace_back( draw_hint, translate_marker( "Hint" ), 1, 32, false );
+    ret.emplace_back( draw_limbs_icons, translate_marker( "Limbs" ), 3, 32, true );
+    ret.emplace_back( draw_status_icons, translate_marker( "Status" ), 2, 32, true );
+    ret.emplace_back( draw_mana_icons, translate_marker( "Mana" ), 1, 32, true, spell_panel );
+    ret.emplace_back( draw_needs_icons, translate_marker( "Needs" ), 3, 32, true );
+    ret.emplace_back( draw_veh_padding, translate_marker( "Vehicle" ), 2, 32, true, veh_panel );
+    ret.emplace_back( draw_location_icons, translate_marker( "Location" ), 3, 32, true );
+    ret.emplace_back( draw_wind_padding, translate_marker( "Wind" ), 1, 32, false );
+    ret.emplace_back( draw_weapon_icons, translate_marker( "Weapon" ), 2, 32, true );
+    ret.emplace_back( draw_weightvolume_icons, translate_marker( "Wgt/Vol" ), 1, 32, true );
+    ret.emplace_back( draw_messages, translate_marker( "Log" ), -2, 32, true );
+    ret.emplace_back( draw_moon_narrow, translate_marker( "Moon" ), 2, 32, false );
+    ret.emplace_back( draw_armor_padding, translate_marker( "Armor" ), 5, 32, false );
+    ret.emplace_back( draw_armor_comp, translate_marker( "comp.Armor" ), 1, 32, false );
+    ret.emplace_back( draw_compass_padding, translate_marker( "Compass" ), 8, 32, true );
+    ret.emplace_back( draw_compass_padding, translate_marker( "Comp.Compass" ), 3, 32, false );
+    ret.emplace_back( draw_simple_compass, translate_marker( "Sim.Compass" ), 1, 32, false );
+#if defined(TILES)
+    ret.emplace_back( draw_mminimap, translate_marker( "Map" ), -1, 32, true, default_render, true );
+#endif // TILES
+    ret.emplace_back( draw_ai_goal, "AI Needs", 1, 32, false );
+
+    return ret;
+}
+
+} // namespace
+
 static std::map<std::string, std::vector<window_panel>> initialize_default_panel_layouts()
 {
     std::map<std::string, std::vector<window_panel>> ret;
+
+    ret.emplace( translate_marker( "icons" ), initialize_default_icons_panels() );
 
     ret.emplace( translate_marker( "classic" ), initialize_default_classic_panels() );
     ret.emplace( translate_marker( "compact" ), initialize_default_compact_panels() );
@@ -2587,7 +2912,7 @@ static std::map<std::string, std::vector<window_panel>> initialize_default_panel
 
 panel_manager::panel_manager()
 {
-    current_layout_id = "labels";
+    current_layout_id = "icons";
     layouts = initialize_default_panel_layouts();
 }
 

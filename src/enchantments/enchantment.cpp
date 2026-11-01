@@ -286,7 +286,7 @@ void enchantment::load(const JsonObject& jo, const std::string&) {
             enchantment_value_id value = enchantment_value_id(value_obj.get_string("value"));
             const int add = value_obj.get_int("add", 0);
             const double mult = value_obj.get_float("multiply", 0.0);
-            const double max = value_obj.get_int("max", 0);
+            const int max = value_obj.get_int("max", 0);
             if (add != 0) { values_add.emplace(value, add); }
             if (mult != 0.0) {
                 // Limit precision to minimize inconsistencies between platforms / compilers

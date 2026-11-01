@@ -3288,6 +3288,13 @@
   },
   {
     "type": "keybinding",
+    "id": "LOAD_PALETTE_THEME",
+    "category": "COLORS",
+    "name": "Load palette theme",
+    "bindings": [ { "input_method": "keyboard", "key": "p" }, { "input_method": "keyboard", "key": "P" } ]
+  },
+  {
+    "type": "keybinding",
     "id": "YES",
     "category": "YESNO",
     "name": "Yes",

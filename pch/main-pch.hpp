@@ -1,4 +1,9 @@
  
+// <cmath> is precompiled before math_defines.h runs, so M_PI etc. must be enabled here.
+#ifndef _USE_MATH_DEFINES
+#define _USE_MATH_DEFINES
+#endif
+
 #include <algorithm>
 #include <array>
 #include <bitset>
@@ -38,9 +43,11 @@
 #include <map>
 #include <memory>
 #include <numeric>
+#include <optional>
 #include <ostream>
 #include <queue>
 #include <random>
+#include <ranges>
 #include <set>
 #include <sstream>
 #include <stack>

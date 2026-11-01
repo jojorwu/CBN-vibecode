@@ -141,6 +141,24 @@ TEST_CASE("scent_blockers_ignore_vehicle_parts_outside_cache", "[scent]") {
     CHECK(scent_transfer[MAPSIZE_Y] == 1);
 }
 
+TEST_CASE("scent_does_not_pass_through_walls_under_open_sky", "[scent]") {
+    clear_all_state();
+    build_test_map(ter_id("t_pavement"));
+
+    auto& here = get_map();
+    const auto origin = tripoint_bub_ms(60, 60, 0);
+    const auto wall = origin + tripoint_east;
+    here.ter_set(wall, ter_id("t_brick_wall"));
+    REQUIRE(here.ter(wall + tripoint_above) != ter_id("t_brick_wall"));
+
+    g->scent.reset();
+    g->scent.set(origin, 1000, scenttype_id("sc_human"));
+    for (int i = 0; i < 3; ++i) { g->scent.update(origin, here); }
+
+    CHECK(g->scent.get(wall) == 0);
+    CHECK(g->scent.get(origin + tripoint_west) > 0);
+}
+
 TEST_CASE("scent_matches_old", "[.]") {
     clear_all_state();
     tripoint_bub_ms origin(60, 60, 0);

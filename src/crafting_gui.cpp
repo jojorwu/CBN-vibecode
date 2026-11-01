@@ -494,7 +494,7 @@ static std::vector<std::string> recipe_info(
         const auto enchant_mult_add = crafter.bonus_from_enchantments( total_mult_without_enchant,
                                       enchantment_value_id( "CRAFTING_SPEED" ) );
 
-        const auto total_mult = total_mult_without_enchant + enchant_mult_add;
+        const auto total_mult = static_cast<float>( total_mult_without_enchant + enchant_mult_add );
 
         const auto enchant_mult = total_mult / total_mult_without_enchant;
 

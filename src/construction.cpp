@@ -788,8 +788,8 @@ std::optional<construction_id> construction_menu( const bool blueprint )
                     const auto tools_mult =
                         crafting_tools_speed_multiplier( g->u, current_con->requirements.obj() );
                     const auto mutation_mult = g->u.mutation_value( "construction_speed_modifier" );
-                    const auto ench_mult = 1.0 + g->u.bonus_from_enchantments( 1.0,
-                                           enchantment_value_id( "CONSTRUCTION_SPEED_CON" ) );
+                    const auto ench_mult = static_cast<float>( 1.0 + g->u.bonus_from_enchantments( 1.0,
+                                           enchantment_value_id( "CONSTRUCTION_SPEED_CON" ) ) );
                     const auto scaling = get_option<int>( "CONSTRUCTION_SCALING" );
                     const auto game_opt_mult = scaling == 0 ? 9999.0f : 100.0f / scaling;
                     const auto total_mult =

@@ -8,6 +8,7 @@
 #    include "catacharset.h"
 #    include "color.h"
 #    include "color_loader.h"
+#    include "color_theme.h"
 #    include "cuboid_rectangle.h"
 #    include "cursesdef.h" // IWYU pragma: associated
 #    include "cursesport.h"
@@ -47,6 +48,7 @@
 #    include "sdl_wrappers.h"
 #    include "sdlsound.h"
 #    include "string_formatter.h"
+#    include "ui_icons.h"
 #    include "ui_manager.h"
 #    include "uistate.h"
 #    include "wcwidth.h"
@@ -1581,7 +1583,17 @@ static bool draw_window( Font_Ptr &font, const catacurses::window &w, point offs
             }
             geometry->rect( renderer, point( drawx, drawy ), font->width * cw, font->height,
                             color_as_sdl( BG ) );
-            if( use_draw_ascii_lines_routine ) {
+            if( const auto icon = ui_icons::from_codepoint( static_cast<uint32_t>( codepoint ) ) ) {
+                const auto drawn = ui_icons::draw( renderer, {
+                    .icon = *icon,
+                    .area = SDL_Rect{ drawx, drawy, font->width * cw, font->height },
+                    .dimmed = FG == catacurses::black + 8
+                } );
+                if( !drawn ) {
+                    font->OutputChar( renderer, geometry, ui_icons::fallback_glyph( *icon ),
+                                      point( drawx, drawy ), FG );
+                }
+            } else if( use_draw_ascii_lines_routine ) {
                 font->draw_ascii_lines( renderer, geometry, uc, point( drawx, drawy ), FG );
             } else {
                 font->OutputChar( renderer, geometry, cell.ch, point( drawx, drawy ), FG );
@@ -3769,6 +3781,42 @@ static void init_term_size_and_scaling_factor()
 }
 
 //Basic Init, create the font, backbuffer, etc
+namespace
+{
+
+/// Font settings used at startup, kept so fonts can be rebuilt when the palette changes.
+auto loaded_fonts = font_loader{};
+
+/// Fonts render glyphs with the palette baked in, so they must be rebuilt after it changes.
+auto create_fonts( const font_loader &fl ) -> void
+{
+    try {
+        font = std::make_unique<FontFallbackList>( renderer, format, fl.fontwidth, fl.fontheight,
+                windowsPalette, fl.typeface, fl.fontsize, fl.fontblending );
+        map_font = std::make_unique<FontFallbackList>( renderer, format, fl.map_fontwidth,
+                   fl.map_fontheight,
+                   windowsPalette, fl.map_typeface, fl.map_fontsize, fl.fontblending );
+        overmap_font = std::make_unique<FontFallbackList>( renderer, format, fl.overmap_fontwidth,
+                       fl.overmap_fontheight,
+                       windowsPalette, fl.overmap_typeface, fl.overmap_fontsize, fl.fontblending );
+    } catch( std::exception & /*e*/ ) {
+        font.reset();
+        map_font.reset();
+        overmap_font.reset();
+        throw;
+    }
+}
+
+} // namespace
+
+auto apply_base_color_theme() -> bool
+{
+    color_loader<SDL_Color>().load( windowsPalette );
+    create_fonts( loaded_fonts );
+    need_invalidate_framebuffers = true;
+    return true;
+}
+
 void catacurses::init_interface()
 {
     last_input = input_event();
@@ -3846,21 +3894,8 @@ void catacurses::init_interface()
     // initialize sound set
     load_soundset();
 
-    try {
-        font = std::make_unique<FontFallbackList>( renderer, format, fl.fontwidth, fl.fontheight,
-                windowsPalette, fl.typeface, fl.fontsize, fl.fontblending );
-        map_font = std::make_unique<FontFallbackList>( renderer, format, fl.map_fontwidth,
-                   fl.map_fontheight,
-                   windowsPalette, fl.map_typeface, fl.map_fontsize, fl.fontblending );
-        overmap_font = std::make_unique<FontFallbackList>( renderer, format, fl.overmap_fontwidth,
-                       fl.overmap_fontheight,
-                       windowsPalette, fl.overmap_typeface, fl.overmap_fontsize, fl.fontblending );
-    } catch( std::exception &e ) {
-        font.reset();
-        map_font.reset();
-        overmap_font.reset();
-        throw;
-    }
+    loaded_fonts = fl;
+    create_fonts( loaded_fonts );
 
     stdscr = newwin( get_terminal_height(), get_terminal_width(), point_zero );
     //newwin calls `new WINDOW`, and that will throw, but not return nullptr.

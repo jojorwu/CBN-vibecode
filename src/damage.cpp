@@ -60,6 +60,7 @@ const std::string damage_unit::get_internal_name() const
         case NUM_DT:
             return std::to_string( NUM_DT );
     }
+    std::unreachable();
 }
 const std::string damage_unit::get_name() const
 {
@@ -561,7 +562,7 @@ constexpr auto non_physical_damage_mappings = std::array<DamageMapping, 8>
 auto get_float_optional( const JsonObject &jo, const std::string &name,
                          const std::optional<float> fallback = std::nullopt ) -> std::optional<float>
 {
-    return jo.has_member( name ) ? std::make_optional<float>( jo.get_float( name, 0.0f ) ) : fallback;
+    return jo.has_member( name ) ? std::make_optional( static_cast<float>( jo.get_float( name, 0.0f ) ) ) : fallback;
 }
 
 } // namespace

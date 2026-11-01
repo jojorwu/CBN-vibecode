@@ -7,6 +7,8 @@
 #include <vector>
 
 #include "cata_utility.h"
+#include "catacharset.h"
+#include "color_theme.h"
 #include "cursesdef.h"
 #include "debug.h"
 #include "filesystem.h"
@@ -729,7 +731,10 @@ static void draw_header( const catacurses::window &w )
     shortcut_print( w, point( tmpx, 0 ), c_white, c_light_green, _( "Load <T>emplate" ) );
 
     // NOLINTNEXTLINE(cata-use-named-point-constants)
-    mvwprintz( w, point( 0, 1 ), c_white, _( "Some color changes may require a restart." ) );
+    const auto restart_note = std::string( _( "Some color changes may require a restart." ) );
+    mvwprintz( w, point( 0, 1 ), c_white, restart_note );
+    shortcut_print( w, point( utf8_width( restart_note ) + 2, 1 ), c_white, c_light_green,
+                    _( "Load <P>alette theme" ) );
 
     mvwhline( w, point( 0, 2 ), LINE_OXOX, getmaxx( w ) ); // Draw line under header
     mvwputch( w, point( 48, 2 ), BORDER_COLOR, LINE_OXXX ); //^|^
@@ -792,6 +797,7 @@ void color_manager::show_gui()
     ctxt.register_action( "QUIT" );
     ctxt.register_action( "REMOVE_CUSTOM" );
     ctxt.register_action( "LOAD_TEMPLATE" );
+    ctxt.register_action( "LOAD_PALETTE_THEME" );
     ctxt.register_action( "HELP_KEYBINDINGS" );
 
     std::map<std::string, color_struct> name_color_map;
@@ -945,6 +951,34 @@ void color_manager::show_gui()
             }
 
             finalize(); // Need to recalculate caches
+
+        } else if( action == "LOAD_PALETTE_THEME" ) {
+            const auto themes = available_color_themes();
+            if( themes.empty() ) {
+                popup( _( "No palette themes found in data/raw/color_themes." ) );
+                continue;
+            }
+
+            uilist ui_themes;
+            ui_themes.w_y_setup = [&]( int ) -> int {
+                return iHeaderHeight + 1 + calc_offset_y();
+            };
+            ui_themes.w_height_setup = 18;
+            ui_themes.text = _( "Palette themes:" );
+            for( const auto &theme : themes ) {
+                ui_themes.addentry( theme.name );
+            }
+            ui_themes.query();
+
+            if( ui_themes.ret < 0 || static_cast<size_t>( ui_themes.ret ) >= themes.size() ) {
+                continue;
+            }
+            const auto &theme = themes[ui_themes.ret];
+            if( !install_color_theme( theme ) ) {
+                popup( _( "Failed to install palette theme \"%s\"." ), theme.name );
+            } else if( !apply_base_color_theme() ) {
+                popup( _( "Palette theme \"%s\" will be used after restarting the game." ), theme.name );
+            }
 
         } else if( action == "CONFIRM" ) {
             uilist ui_colors;

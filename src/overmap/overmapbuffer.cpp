@@ -1352,7 +1352,7 @@ auto overmapbuffer::find_closest(const tripoint_abs_omt& origin, const omt_find_
     if (params.search_range.second == 0) { params.search_range.second = OMAPX * 5; }
     if (!params.max_results.has_value()) {
         // Limit potential random sample size, scaling with number of terrain types
-        params.max_results = 10 * pp.types.size();
+        params.max_results = static_cast<int>( 10 * pp.types.size() );
     }
 
     auto scan_result = find_all(origin, params);

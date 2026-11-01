@@ -11,7 +11,8 @@ list(REMOVE_ITEM CATACLYSM_BN_SOURCES ${MAIN_CPP} ${MESSAGES_CPP})
 # compile them with no optimization to reduce build times.
 file(GLOB CATALUA_BINDINGS_SOURCES CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/src/catalua_bindings*.cpp)
 if (MSVC)
-    set(CATALUA_BINDINGS_COMPILE_OPTIONS /Od /Ob0)
+    # /Od /Ob0 would override the config's /O2 /Ob1 and trigger warning D9025.
+    set(CATALUA_BINDINGS_COMPILE_OPTIONS "/FI${CMAKE_SOURCE_DIR}/src/catalua_bindings_no_optimize.h")
 else ()
     set(CATALUA_BINDINGS_COMPILE_OPTIONS -O0 -g0)
 endif ()
@@ -54,6 +55,12 @@ add_custom_command(
 function(setup_common_target_properties target_name)
     # Add version dependency
     add_dependencies(${target_name} get_version)
+
+    # Precompile the standard library and low-level project headers shared by most TUs.
+    if (CATA_USE_PCH)
+        target_precompile_headers(${target_name} PRIVATE
+            ${CMAKE_SOURCE_DIR}/pch/game-pch.hpp)
+    endif ()
 
     # Add common libraries
     target_link_libraries(${target_name} PUBLIC ZLIB::ZLIB)

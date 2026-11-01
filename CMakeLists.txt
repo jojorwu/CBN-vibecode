@@ -56,6 +56,14 @@ option(DYNAMIC_LINKING
 option(USE_UNITY_BUILD "Use unity build." "OFF")
 option(JSON_FORMAT "Build JSON formatter" "OFF")
 option(CATA_CCACHE "Try to find and build with ccache" "ON")
+option(CATA_PCH "Use precompiled headers for the main game library." "ON")
+# PCH breaks clang tooling that reads compile_commands.json, but Visual Studio
+# generators never emit that file, so keep PCH there regardless.
+if (CATA_PCH AND (NOT "${CMAKE_EXPORT_COMPILE_COMMANDS}" OR CMAKE_GENERATOR MATCHES "^Visual Studio"))
+    set(CATA_USE_PCH ON)
+else ()
+    set(CATA_USE_PCH OFF)
+endif ()
 option(TESTS "Compile Cata's tests" "ON")
 find_program(DENO_BINARY deno)
 if(DENO_BINARY)

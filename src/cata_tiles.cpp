@@ -2536,13 +2536,13 @@ void tileset_loader::load_internal( const JsonObject &config, const std::string 
             tint_blend_mode top_blend_mode = parse_blend_mode( tint_def.get_string( "blend_mode", "" ) );
             const bool has_top_level = tint_def.has_float( "contrast" ) || tint_def.has_float( "saturation" );
             if( tint_def.has_float( "contrast" ) ) {
-                top_contrast = tint_def.get_float( "contrast" );
+                top_contrast = static_cast<float>( tint_def.get_float( "contrast" ) );
             }
             if( tint_def.has_float( "saturation" ) ) {
-                top_saturation = tint_def.get_float( "saturation" );
+                top_saturation = static_cast<float>( tint_def.get_float( "saturation" ) );
             }
             if( tint_def.has_float( "brightness" ) ) {
-                top_brightness = tint_def.get_float( "brightness" );
+                top_brightness = static_cast<float>( tint_def.get_float( "brightness" ) );
             }
 
             tint_config fg = parse_tint_config( tint_def, "fg", has_top_level, top_blend_mode,

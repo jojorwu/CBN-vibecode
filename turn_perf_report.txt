@@ -1,0 +1,837 @@
+turn benchmark: 80 monsters, 200 item piles, 300 turns: 967.2 ms total, 3.224 ms/turn, 1 bubble resizes
+== self (499 samples) ==
+ 18.04%  mapbuffer::lookup_submap_in_memory
+  7.82%  ZwWaitForAlertByThreadId
+  6.01%  std::_Vector_iterator<std::_Vector_val<std::_Simple_types<coords::coord_point<tripoint,2,0> > > >::operator+
+  5.21%  RtlReleaseSRWLockExclusive
+  3.81%  RtlAllocateHeap
+  3.21%  mapbuffer::mark_submap_caches_dirty
+  2.81%  RtlAcquireSRWLockExclusive
+  2.81%  submap::rebuild_absorption_cache
+  2.20%  map::current_lightmap_source_signature
+  2.20%  safe_reference<item>::operator*
+  1.80%  distribution_grid::distribution_grid
+  1.60%  std::map<coords::coord_point<tripoint,1,2>,std::shared_ptr<distribution_grid>,std::less<coords::coord_point<tripoint,1,2> >,std::allocator<std::pair<c
+  1.60%  generic_factory<ter_t>::obj
+  1.40%  NtFreeVirtualMemory
+  1.40%  std::_Tree<std::_Tmap_traits<string_id<dimension>,std::unique_ptr<mapbuffer,std::default_delete<mapbuffer> >,std::less<string_id<dimension> >,std::all
+  1.20%  std::operator<=><char,std::char_traits<char>,std::allocator<char> >
+  1.20%  _Mtx_lock
+  1.20%  RtlFreeHeap
+  1.20%  map::on_submap_loaded
+  1.00%  mapbuffer_registry::get
+  1.00%  scent_map::update
+  1.00%  GetCurrentThreadId
+  1.00%  memset
+  1.00%  map::inbounds
+  0.80%  std::_Hash_array_representation<char>
+  0.80%  map::build_floor_cache
+  0.80%  std::_Hash<std::_Umap_traits<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,int,std::_Uhash_compare<std::basic_string<char,std::
+  0.80%  generic_factory<furn_t>::obj
+  0.60%  active_item_cache::empty
+  0.60%  map::update_suspension_cache
+  0.60%  NtAlertThreadByThreadId
+  0.60%  map::spawn_monsters_submap
+  0.60%  map::is_outside
+  0.60%  distribution_grid_tracker::make_distribution_grid_at
+  0.60%  std::map<coords::coord_point<tripoint,6,3>,std::bitset<6>,std::less<coords::coord_point<tripoint,6,3> >,std::allocator<std::pair<coords::coord_point<t
+  0.60%  cata::event_detail::make_event_helper<43,std::integer_sequence<unsigned __int64,0,1> >::operator()<bool const & __ptr64,std::basic_string<char,std::ch
+  0.40%  map::build_absorption_cache
+  0.40%  field::begin
+  0.40%  map::inbounds
+  0.40%  map::get_submap_at
+  0.40%  luaX_token2str
+  0.40%  Internal_EnumSystemLocales
+  0.40%  std::fill_n<std::_Vb_iterator<std::_Wrap_alloc<std::allocator<unsigned int> > >,int,bool>
+  0.40%  std::vector<mod_value,std::allocator<mod_value> >::_Emplace_reallocate<mod_value const & __ptr64>
+  0.40%  overmapbuffer::electric_grid_at
+  0.40%  std::_Hash<std::_Uset_traits<coords::coord_point<tripoint,1,2>,std::_Uhash_compare<coords::coord_point<tripoint,1,2>,std::hash<coords::coord_point<tri
+  0.40%  fluid_grid::liquid_storage_state::stored_total
+  0.40%  map::loadn
+  0.40%  divide_xy_round_to_minus_infinity
+  0.40%  mapbuffer_load_region::operator=
+  0.40%  _Mtx_unlock
+  0.20%  RtlReleaseSRWLockShared
+  0.20%  Creature::Creature
+  0.20%  std::_Impl_copy_memmeow_tail<1,char * __ptr64>
+  0.20%  cata::has_hooks
+  0.20%  std::_Fnv1a_append_value<int>
+  0.20%  SkillLevelMap::get_skill_level_object
+  0.20%  map_local_to_abs
+  0.20%  submap::rebuild_floor_cache
+  0.20%  mapbuffer::actualize_submap
+
+== inclusive (499 samples) ==
+100.00%  BaseThreadInitThunk
+100.00%  Catch::Session::run
+100.00%  Catch::Session::runInternal
+100.00%  Catch::RunContext::runCurrentTest
+100.00%  Catch::RunContext::runTest
+100.00%  std::basic_ofstream<char,std::char_traits<char> >::basic_ofstream<char,std::char_traits<char> >
+100.00%  Catch::RunContext::exceptionEarlyReported
+100.00%  RtlUserThreadStart
+100.00%  __scrt_common_main_seh
+100.00%  Catch::RunContext::invokeActiveTestCase
+100.00%  main
+ 99.80%  game::do_turn
+ 56.51%  game::resize_reality_bubble_to
+ 56.51%  game::update_performance_bubble
+ 34.87%  game::load_map
+ 28.46%  mapbuffer::lookup_submap_in_memory
+ 23.45%  map::build_map_cache
+ 18.84%  map::load
+ 17.64%  map::loadn
+ 16.63%  mapbuffer::mark_submap_caches_dirty
+ 15.03%  std::_Func_impl_no_alloc<`restore_on_out_of_scope<std::optional<coords::coord_point<tripoint,1,0> > >::restore_on_out_of_scope<std::optional<coords::c
+ 15.03%  mapbuffer::for_each_simulated_submap
+ 15.03%  mapbuffer_load_region::operator=
+ 15.03%  game::world_tick
+ 15.03%  mapbuffer_registry::for_each
+ 15.03%  mapbuffer::for_each_simulated_submap_position
+ 14.83%  map::build_absorption_cache
+ 14.03%  submap::rebuild_absorption_cache
+ 12.22%  distribution_grid_tracker::on_submap_loaded
+ 11.42%  distribution_grid_tracker::make_distribution_grid_at
+ 10.02%  scent_map::update
+  8.62%  map::set_outside_cache_dirty
+  7.82%  map::get_submap_at
+  7.82%  ZwWaitForAlertByThreadId
+  7.62%  map::get_submap_at
+  7.62%  std::_Atomic_wait_direct<__int64,__int64>
+  7.41%  RtlWaitOnAddress
+  7.41%  WaitOnAddress
+  7.21%  map::set_floor_cache_dirty
+  6.81%  std::_Vector_iterator<std::_Vector_val<std::_Simple_types<coords::coord_point<tripoint,2,0> > > >::operator+
+  5.81%  RtlAllocateHeap
+  5.81%  map::is_outside
+  5.61%  _Mtx_unlock
+  5.41%  _Mtx_lock
+  5.21%  RtlReleaseSRWLockExclusive
+  4.61%  operator new
+  4.41%  std::_Uninitialized_move<scent_type * __ptr64,std::allocator<scent_type> >
+  4.21%  _malloc_base
+  3.81%  cata::string_formatter::get_nth_arg_as<unsigned __int64,0,std::basic_string<char,std::char_traits<char>,std::allocator<char> >,float & __ptr64,float &
+  3.61%  map::scent_blockers
+  3.61%  mapbuffer_registry::get
+  3.61%  std::fill_n<std::_Vb_iterator<std::_Wrap_alloc<std::allocator<unsigned int> > >,int,bool>
+  3.41%  map::set_transparency_cache_dirty
+  3.21%  overmapbuffer::electric_grid_at
+  3.21%  map::invalidate_lightmap_caches_if_light_state_changed
+  3.21%  RtlAcquireSRWLockExclusive
+  3.21%  map::current_lightmap_source_signature
+  3.01%  safe_reference<item>::operator*
+  2.81%  Character::update_body
+  2.81%  make_shared_fast<distribution_grid,std::vector<coords::coord_point<tripoint,1,2>,std::allocator<coords::coord_point<tripoint,1,2> > > & __ptr64,mapbuf
+
+== callers of hottest self functions ==
+mapbuffer::lookup_submap_in_memory:
+       26  mapbuffer_load_region::operator= < mapbuffer::for_each_simulated_submap_position < mapbuffer::for_each_simulated_submap < std::_Func_impl_no_alloc<`restore_on_out_of_scope<std::optio
+       12  mapbuffer::mark_submap_caches_dirty < map::set_outside_cache_dirty < map::set_floor_cache_dirty < map::loadn
+       11  mapbuffer::mark_submap_caches_dirty < map::set_outside_cache_dirty < map::loadn < map::load
+        9  mapbuffer::mark_submap_caches_dirty < map::set_transparency_cache_dirty < map::loadn < map::load
+ZwWaitForAlertByThreadId:
+       19  RtlWaitOnAddress < WaitOnAddress < std::_Atomic_wait_direct<__int64,__int64> < cata::string_formatter::get_nth_arg_as<unsigned __int64,0,st
+       15  RtlWaitOnAddress < WaitOnAddress < std::_Atomic_wait_direct<__int64,__int64> < std::_Uninitialized_move<scent_type * __ptr64,std::allocator
+        3  RtlWaitOnAddress < WaitOnAddress < std::_Atomic_wait_direct<__int64,__int64> < hypot<int,int,0>
+        2  RtlSleepConditionVariableSRW < RtlAcquireSRWLockExclusive < _Mtx_lock < cata_thread_pool::submit
+std::_Vector_iterator<std::_Vector_val<std::_Simple_types<coords::coord_point<tripoint,2,0> > > >::operator+:
+       30  mapbuffer_load_region::operator= < mapbuffer::for_each_simulated_submap_position < mapbuffer::for_each_simulated_submap < std::_Func_impl_no_alloc<`restore_on_out_of_scope<std::optio
+RtlReleaseSRWLockExclusive:
+        9  _Mtx_unlock < mapbuffer::lookup_submap_in_memory < mapbuffer_load_region::operator= < mapbuffer::for_each_simulated_submap_position
+        7  _Mtx_unlock < mapbuffer::lookup_submap_in_memory < mapbuffer::mark_submap_caches_dirty < map::set_outside_cache_dirty
+        3  _Mtx_unlock < mapbuffer::lookup_submap_in_memory < mapbuffer::mark_submap_caches_dirty < map::set_pathfinding_cache_dirty
+        3  _Mtx_unlock < mapbuffer::lookup_submap_in_memory < map::get_submap_at < map::get_submap_at
+RtlAllocateHeap:
+        3  _malloc_base < operator new < std::vector<mod_value,std::allocator<mod_value> >::_Emplace_ < distribution_grid_tracker::make_distribution_grid_at
+        3  _malloc_base < operator new < overmapbuffer::electric_grid_at < distribution_grid_tracker::make_distribution_grid_at
+        3  _malloc_base < operator new < std::deque<coords::coord_point<tripoint,1,3>,std::allocator< < overmapbuffer::electric_grid_at
+        1  _malloc_base < operator new < enchantment::enchantment < Character::recalculate_enchantment_cache
+mapbuffer::mark_submap_caches_dirty:
+        6  map::set_outside_cache_dirty < map::loadn < map::load < game::load_map
+        4  map::set_floor_cache_dirty < map::loadn < map::load < game::load_map
+        3  map::set_transparency_cache_dirty < map::loadn < map::load < game::load_map
+        2  map::set_outside_cache_dirty < map::set_floor_cache_dirty < map::loadn < map::load
+RtlAcquireSRWLockExclusive:
+        6  _Mtx_lock < mapbuffer::lookup_submap_in_memory < map::get_submap_at < map::get_submap_at
+        3  _Mtx_lock < mapbuffer::lookup_submap_in_memory < mapbuffer::mark_submap_caches_dirty < map::set_outside_cache_dirty
+        2  _Mtx_lock < mapbuffer::lookup_submap_in_memory < mapbuffer::mark_submap_caches_dirty < map::set_transparency_cache_dirty
+        2  _Mtx_lock < mapbuffer::lookup_submap_in_memory < mapbuffer_load_region::operator= < mapbuffer::for_each_simulated_submap_position
+submap::rebuild_absorption_cache:
+       14  map::build_absorption_cache < map::build_map_cache < game::resize_reality_bubble_to < game::update_performance_bubble
+map::current_lightmap_source_signature:
+       11  map::invalidate_lightmap_caches_if_light_state_changed < map::build_map_cache < game::do_turn < std::basic_ofstream<char,std::char_traits<char> >::basic_ofs
+safe_reference<item>::operator*:
+       11  std::fill_n<std::_Vb_iterator<std::_Wrap_alloc<std::allocato < map::scent_blockers < scent_map::update < game::do_turn
+distribution_grid::distribution_grid:
+        6  make_shared_fast<distribution_grid,std::vector<coords::coord < distribution_grid_tracker::make_distribution_grid_at < distribution_grid_tracker::on_submap_loaded < game::load_map
+        3  make_shared_fast<distribution_grid,std::vector<coords::coord < distribution_grid_tracker::make_distribution_grid_at < distribution_grid_tracker::on_submap_loaded < submap_load_manager::update
+std::map<coords::coord_point<tripoint,1,2>,std::shared_ptr<distribution_grid>,std::less<coords::coord_point<tripoint,1,2:
+        8  distribution_grid_tracker::make_distribution_grid_at < distribution_grid_tracker::on_submap_loaded < game::load_map < game::resize_reality_bubble_to
+
+turn benchmark: 80 monsters, 200 item piles, 300 turns: 430.4 ms total, 1.435 ms/turn, 0 bubble resizes
+== self (222 samples) ==
+ 14.41%  mapbuffer::lookup_submap_in_memory
+  8.56%  std::_Vector_iterator<std::_Vector_val<std::_Simple_types<coords::coord_point<tripoint,2,0> > > >::operator+
+  7.66%  ZwWaitForAlertByThreadId
+  7.21%  map::current_lightmap_source_signature
+  5.41%  RtlReleaseSRWLockExclusive
+  4.95%  safe_reference<item>::operator*
+  3.15%  RtlAcquireSRWLockExclusive
+  2.70%  NtAlertThreadByThreadId
+  2.70%  scent_map::update
+  1.80%  generic_factory<ter_t>::obj
+  1.80%  memcmp
+  1.35%  std::_Hash_array_representation<char>
+  1.35%  active_item_cache::empty
+  1.35%  RtlAllocateHeap
+  0.90%  cata::event_detail::make_event_helper<43,std::integer_sequence<unsigned __int64,0,1> >::operator()<bool const & __ptr64,std::basic_string<char,std::ch
+  0.90%  map::process_items
+  0.90%  std::operator<=><char,std::char_traits<char>,std::allocator<char> >
+  0.90%  Character::get_mutations
+  0.90%  get_options
+  0.90%  GetCurrentThreadId
+  0.90%  _Mtx_lock
+  0.90%  enchantment_value::has_parent
+  0.90%  map::inbounds
+  0.90%  reality_bubble_origin_from_player
+  0.90%  RtlSetProcessPreferredUILanguages
+  0.45%  map::has_flag_ter_or_furn
+  0.45%  map::build_map_cache
+  0.45%  __crtLCMapStringW
+  0.45%  overmapbuffer::get_om_global
+  0.45%  mapbuffer::for_each_simulated_submap_position
+  0.45%  sol::u_detail::binding<char const * __ptr64,bool (__cdecl Creature::*)(string_id<mutation_branch> const & __ptr64)const __ptr64,Creature>::call<1,0>
+  0.45%  Catch::TestCaseTracking::TrackerContext::currentTracker
+  0.45%  lua_getglobal
+  0.45%  game::look_debug
+  0.45%  mtype::has_flag
+  0.45%  std::_Global_new<std::_Func_impl_no_alloc<std::function<enum VisitResponse __cdecl(item const * __ptr64,item const * __ptr64)>,enum VisitResponse,item
+  0.45%  RtlFreeHeap
+  0.45%  _malloc_base
+  0.45%  RtlVirtualUnwind
+  0.45%  player_reality_bubble_origin
+  0.45%  field::begin
+  0.45%  std::_Func_impl_no_alloc<Character::has_mission_item_filter,enum VisitResponse,detached_ptr<item> && __ptr64>::_Copy
+  0.45%  location_vector<item>::begin
+  0.45%  game::player_visibility_cache_current
+  0.45%  WideCharToMultiByte
+  0.45%  SDL_GetTicks
+  0.45%  RtlSleepConditionVariableSRW
+  0.45%  abs_to_bub
+  0.45%  Character::temp_corrected_by_climate_control
+  0.45%  generic_factory<furn_t>::obj
+  0.45%  Creature::has_effect
+  0.45%  std::_Adl_verify_range<std::_List_unchecked_iterator<std::_List_val<std::_List_simple_types<std::pair<RGBColor const ,std::basic_string<char,std::char
+  0.45%  std::basic_string<char,std::char_traits<char>,std::allocator<char> >::basic_string<char,std::char_traits<char>,std::allocator<char> >
+  0.45%  std::_Tree<std::_Tmap_traits<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::basic_string<char,std::char_traits<char>,std::a
+  0.45%  point::point
+  0.45%  Character::bub_pos
+  0.45%  map::furn
+  0.45%  mapbuffer::lookup_submap
+  0.45%  map::check_vehicle_zones
+  0.45%  _free_base
+
+== inclusive (222 samples) ==
+100.00%  Catch::Session::runInternal
+100.00%  RtlUserThreadStart
+100.00%  Catch::RunContext::exceptionEarlyReported
+100.00%  main
+100.00%  Catch::RunContext::runCurrentTest
+100.00%  Catch::RunContext::runTest
+100.00%  Catch::Session::run
+100.00%  BaseThreadInitThunk
+100.00%  std::basic_ofstream<char,std::char_traits<char> >::basic_ofstream<char,std::char_traits<char> >
+100.00%  Catch::RunContext::invokeActiveTestCase
+100.00%  __scrt_common_main_seh
+ 99.55%  game::do_turn
+ 30.63%  game::world_tick
+ 30.63%  mapbuffer::for_each_simulated_submap
+ 30.63%  mapbuffer_registry::for_each
+ 30.63%  mapbuffer::for_each_simulated_submap_position
+ 30.63%  std::_Func_impl_no_alloc<`restore_on_out_of_scope<std::optional<coords::coord_point<tripoint,1,0> > >::restore_on_out_of_scope<std::optional<coords::c
+ 30.18%  mapbuffer_load_region::operator=
+ 23.87%  mapbuffer::lookup_submap_in_memory
+ 19.82%  scent_map::update
+ 13.51%  map::build_map_cache
+ 11.26%  map::invalidate_lightmap_caches_if_light_state_changed
+ 11.26%  map::current_lightmap_source_signature
+ 11.26%  std::_Vector_iterator<std::_Vector_val<std::_Simple_types<coords::coord_point<tripoint,2,0> > > >::operator+
+  8.11%  RtlWaitOnAddress
+  8.11%  WaitOnAddress
+  8.11%  std::_Atomic_wait_direct<__int64,__int64>
+  8.11%  std::_Uninitialized_move<scent_type * __ptr64,std::allocator<scent_type> >
+  7.66%  ZwWaitForAlertByThreadId
+  7.21%  std::fill_n<std::_Vb_iterator<std::_Wrap_alloc<std::allocator<unsigned int> > >,int,bool>
+  7.21%  map::scent_blockers
+  6.76%  safe_reference<item>::operator*
+  6.76%  Character::update_bodytemp
+  5.41%  RtlReleaseSRWLockExclusive
+  5.41%  map::process_items
+  5.41%  _Mtx_unlock
+  5.41%  _Mtx_lock
+  4.05%  cata::string_formatter::get_nth_arg_as<unsigned __int64,0,std::basic_string<char,std::char_traits<char>,std::allocator<char> >,float & __ptr64,float &
+  4.05%  Character::update_body
+  4.05%  game::monmove
+  4.05%  cata_thread_pool::submit
+  3.60%  RtlAcquireSRWLockExclusive
+  3.60%  get_heat_radiation
+  3.60%  map::get_submap_at
+  3.15%  Character::process_turn
+  3.15%  Character::recalculate_enchantment_cache
+  3.15%  map::maptile_at_internal
+  3.15%  _Cnd_signal
+  3.15%  RtlWakeConditionVariable
+  3.15%  map::maptile_at
+  3.15%  map::get_submap_at
+  2.70%  map::update_visibility_cache
+  2.70%  NtAlertThreadByThreadId
+  2.70%  game::mon_info_update
+  2.70%  game::refresh_player_visibility_cache_if_needed
+  2.25%  game::natural_light_level
+  2.25%  Creature::process_turn
+  2.25%  options_manager::get_option
+  2.25%  RtlAllocateHeap
+  2.25%  sunlight
+
+== callers of hottest self functions ==
+mapbuffer::lookup_submap_in_memory:
+       28  mapbuffer_load_region::operator= < mapbuffer::for_each_simulated_submap_position < mapbuffer::for_each_simulated_submap < std::_Func_impl_no_alloc<`restore_on_out_of_scope<std::optio
+        2  map::get_submap_at < map::get_submap_at < map::maptile_at_internal < map::maptile_at
+        1  submap_load_manager::is_loaded < submap_load_manager::is_simulated < map::process_items < game::do_turn
+        1  map::spawn_monsters_submap < map::spawn_monsters < game::do_turn < std::basic_ofstream<char,std::char_traits<char> >::basic_ofs
+std::_Vector_iterator<std::_Vector_val<std::_Simple_types<coords::coord_point<tripoint,2,0> > > >::operator+:
+       19  mapbuffer_load_region::operator= < mapbuffer::for_each_simulated_submap_position < mapbuffer::for_each_simulated_submap < std::_Func_impl_no_alloc<`restore_on_out_of_scope<std::optio
+ZwWaitForAlertByThreadId:
+        9  RtlWaitOnAddress < WaitOnAddress < std::_Atomic_wait_direct<__int64,__int64> < std::_Uninitialized_move<scent_type * __ptr64,std::allocator
+        8  RtlWaitOnAddress < WaitOnAddress < std::_Atomic_wait_direct<__int64,__int64> < cata::string_formatter::get_nth_arg_as<unsigned __int64,0,st
+map::current_lightmap_source_signature:
+       16  map::invalidate_lightmap_caches_if_light_state_changed < map::build_map_cache < game::do_turn < std::basic_ofstream<char,std::char_traits<char> >::basic_ofs
+RtlReleaseSRWLockExclusive:
+       12  _Mtx_unlock < mapbuffer::lookup_submap_in_memory < mapbuffer_load_region::operator= < mapbuffer::for_each_simulated_submap_position
+safe_reference<item>::operator*:
+       11  std::fill_n<std::_Vb_iterator<std::_Wrap_alloc<std::allocato < map::scent_blockers < scent_map::update < game::do_turn
+RtlAcquireSRWLockExclusive:
+        4  _Mtx_lock < mapbuffer::lookup_submap_in_memory < mapbuffer_load_region::operator= < mapbuffer::for_each_simulated_submap_position
+        1  _Mtx_lock < cata_thread_pool::submit < cata::string_formatter::get_nth_arg_as<unsigned __int64,0,st < map::update_visibility_cache
+        1  _Mtx_lock < scent_map::update < game::do_turn < std::basic_ofstream<char,std::char_traits<char> >::basic_ofs
+        1  _Mtx_lock < mapbuffer::lookup_submap_in_memory < submap_load_manager::is_loaded < submap_load_manager::is_simulated
+NtAlertThreadByThreadId:
+        6  RtlWakeConditionVariable < _Cnd_signal < cata_thread_pool::submit < std::_Uninitialized_move<scent_type * __ptr64,std::allocator
+scent_map::update:
+        6  game::do_turn < std::basic_ofstream<char,std::char_traits<char> >::basic_ofs < Catch::RunContext::invokeActiveTestCase < Catch::RunContext::runCurrentTest
+generic_factory<ter_t>::obj:
+        3  safe_reference<item>::operator* < std::fill_n<std::_Vb_iterator<std::_Wrap_alloc<std::allocato < map::scent_blockers < scent_map::update
+        1  scent_map::update < game::do_turn < std::basic_ofstream<char,std::char_traits<char> >::basic_ofs < Catch::RunContext::invokeActiveTestCase
+memcmp:
+        1  std::operator<=><char,std::char_traits<char>,std::allocator< < std::_Tree<std::_Tmap_traits<string_id<dimension>,std::uniqu < mapbuffer_registry::get < map::get_submap_at
+        1  std::_Hash<std::_Umap_traits<std::basic_string<char,std::cha < options_manager::get_option < game::update_performance_bubble < game::do_turn
+        1  std::operator<=><char,std::char_traits<char>,std::allocator< < std::_Tree<std::_Tmap_traits<string_id<dimension>,std::uniqu < mapbuffer_registry::get < submap_load_manager::is_loaded
+        1  std::_Hash<std::_Umap_traits<std::basic_string<char,std::cha < std::_Hash<std::_Umap_traits<std::basic_string<char,std::cha < options_manager::get_option < calendar::eternal_season
+std::_Hash_array_representation<char>:
+        1  std::_Hash<std::_Umap_traits<std::basic_string<char,std::cha < options_manager::get_option < calendar::eternal_season < is_dawn
+        1  options_manager::get_option < calendar::eternal_season < sunrise < sunrise
+        1  std::_Hash<std::_Umap_traits<std::basic_string<char,std::cha < string_identity_static::string_id_intern < Character::clairvoyance < Character::sees
+
+turn benchmark: 80 monsters, 200 item piles, 300 turns: 752.5 ms total, 2.508 ms/turn, 0 bubble resizes
+== self (392 samples) ==
+ 13.52%  ZwWaitForAlertByThreadId
+  9.44%  mapbuffer::lookup_submap_in_memory
+  6.89%  std::_Vector_iterator<std::_Vector_val<std::_Simple_types<coords::coord_point<tripoint,2,0> > > >::operator+
+  5.87%  map::current_lightmap_source_signature
+  3.83%  sound_event::operator=
+  3.06%  NtAlertThreadByThreadId
+  2.81%  safe_reference<item>::operator*
+  2.55%  RtlAllocateHeap
+  2.30%  RtlReleaseSRWLockExclusive
+  1.79%  std::_Hash_array_representation<char>
+  1.79%  RtlFreeHeap
+  1.53%  scent_map::update
+  1.53%  std::_Hash<std::_Umap_traits<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,int,std::_Uhash_compare<std::basic_string<char,std::
+  1.02%  cata::event_detail::make_event_helper<43,std::integer_sequence<unsigned __int64,0,1> >::operator()<bool const & __ptr64,std::basic_string<char,std::ch
+  1.02%  generic_factory<ter_t>::obj
+  1.02%  std::_Tree<std::_Tmap_traits<string_id<dimension>,std::unique_ptr<mapbuffer,std::default_delete<mapbuffer> >,std::less<string_id<dimension> >,std::all
+  0.77%  map::process_items
+  0.77%  luaH_setint
+  0.77%  memcmp
+  0.77%  std::basic_string<char,std::char_traits<char>,std::allocator<char> >::_Tidy_deallocate
+  0.77%  Creature::has_effect
+  0.77%  monster::has_flag
+  0.77%  mtype::has_flag
+  0.77%  mapbuffer_registry::get
+  0.77%  RtlAcquireSRWLockExclusive
+  0.51%  map::batch_flood_fill_sounds
+  0.51%  active_item_cache::empty
+  0.51%  std::vector<cata::detail::lua_coords::lua_point_coord,std::allocator<cata::detail::lua_coords::lua_point_coord> >::capacity
+  0.51%  monster::is_hallucination
+  0.51%  std::_Hash<std::_Umap_traits<sound_filter_key,std::vector<short,std::allocator<short> >,std::_Uhash_compare<sound_filter_key,std::hash<sound_filter_ke
+  0.51%  sol::detail::inheritance<avatar>::type_cast_bases<Character,Creature>
+  0.51%  std::_Uhash_compare<std::pair<string_id<dimension>,coords::coord_point<point,1,2> >,submap_load_manager::coord_pair_hash<coords::coord_point<point,1,2
+  0.51%  game::monmove
+  0.51%  monster::is_dead
+  0.51%  submap_load_manager::is_simulated
+  0.51%  Catch::TestCaseTracking::TrackerContext::currentTracker
+  0.51%  std::_Tree<std::_Tmap_traits<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,action_attributes,std::less<std::basic_string<char,s
+  0.51%  generic_factory<furn_t>::obj
+  0.51%  map::move_cost
+  0.51%  _free_base
+  0.26%  sol::stack::set_field<0,0,char const (& __ptr64)[4],Character * __ptr64>
+  0.26%  Character::bub_pos
+  0.26%  enchantment::calc_bonus
+  0.26%  MultiByteToWideChar
+  0.26%  LCMapStringEx
+  0.26%  lua_rawgeti
+  0.26%  strcmp
+  0.26%  sol::stack::unqualified_check<sol::detail::as_value_tag<cata::detail::lua_coords::lua_tripoint_coord>,int (__cdecl&)(lua_State * __ptr64,int,enum sol:
+  0.26%  GetCurrentThreadId
+  0.26%  Character::has_trait
+  0.26%  sol::stack::unqualified_getter<sol::detail::as_value_tag<string_id<effect_type> >,void>::get_no_lua_nil_from
+  0.26%  _Mtx_lock
+  0.26%  Skill::is_combat_skill
+  0.26%  std::_Get_unwrapped<mongroup * __ptr64 * __ptr64 const & __ptr64>
+  0.26%  sol::u_detail::usertype_storage_base::self_index_call<0,1,0>
+  0.26%  std::vector<string_id<mutation_branch>,std::allocator<string_id<mutation_branch> > >::_Emplace_reallocate<string_id<mutation_branch> const & __ptr64>
+  0.26%  string_id<enchantment_value>::is_valid
+  0.26%  std::vector<mod_value,std::allocator<mod_value> >::_Emplace_reallocate<mod_value const & __ptr64>
+  0.26%  WideCharToMultiByte
+  0.26%  sol::stack::stack_detail::check_types<string_id<mutation_branch> const & __ptr64,sol::argument_handler<sol::types<bool,string_id<mutation_branch> cons
+
+== inclusive (392 samples) ==
+100.00%  __scrt_common_main_seh
+100.00%  Catch::RunContext::exceptionEarlyReported
+100.00%  std::basic_ofstream<char,std::char_traits<char> >::basic_ofstream<char,std::char_traits<char> >
+100.00%  Catch::RunContext::invokeActiveTestCase
+100.00%  Catch::RunContext::runTest
+100.00%  Catch::RunContext::runCurrentTest
+100.00%  main
+100.00%  Catch::Session::run
+100.00%  Catch::Session::runInternal
+ 99.74%  BaseThreadInitThunk
+ 99.49%  game::do_turn
+ 99.49%  RtlUserThreadStart
+ 21.68%  game::monmove
+ 16.58%  std::_Func_impl_no_alloc<`restore_on_out_of_scope<std::optional<coords::coord_point<tripoint,1,0> > >::restore_on_out_of_scope<std::optional<coords::c
+ 16.58%  mapbuffer::for_each_simulated_submap
+ 16.58%  game::world_tick
+ 16.58%  mapbuffer_load_region::operator=
+ 16.58%  mapbuffer_registry::for_each
+ 16.58%  mapbuffer::for_each_simulated_submap_position
+ 13.52%  ZwWaitForAlertByThreadId
+ 13.52%  RtlWaitOnAddress
+ 13.52%  WaitOnAddress
+ 13.52%  std::_Atomic_wait_direct<__int64,__int64>
+ 12.50%  mapbuffer::lookup_submap_in_memory
+ 12.24%  std::_Vector_iterator<std::_Vector_val<std::_Simple_types<coords::coord_point<tripoint,2,0> > > >::operator+
+ 11.48%  scent_map::update
+ 10.71%  monster::execute_action
+ 10.20%  map::build_map_cache
+ 10.20%  cata::string_formatter::get_nth_arg_as<unsigned __int64,0,std::basic_string<char,std::char_traits<char>,std::allocator<char> >,float & __ptr64,float &
+  9.18%  game::refresh_player_visibility_cache_if_needed
+  9.18%  map::update_visibility_cache
+  8.93%  map::current_lightmap_source_signature
+  8.93%  map::invalidate_lightmap_caches_if_light_state_changed
+  5.61%  map::batch_flood_fill_sounds
+  5.36%  std::_Uninitialized_move<scent_type * __ptr64,std::allocator<scent_type> >
+  4.59%  sound_event::operator=
+  4.34%  Creature::sees
+  4.34%  map::process_items
+  4.34%  map::get_submap_at
+  4.08%  map::get_submap_at
+  3.83%  game::mon_info_update
+  3.57%  map::scent_blockers
+  3.57%  safe_reference<item>::operator*
+  3.57%  Character::update_bodytemp
+  3.57%  std::fill_n<std::_Vb_iterator<std::_Wrap_alloc<std::allocator<unsigned int> > >,int,bool>
+  3.32%  _Cnd_signal
+  3.32%  melee_actor::call
+  3.32%  cata_thread_pool::submit
+  3.32%  RtlWakeConditionVariable
+  3.06%  sol::basic_protected_function<sol::basic_reference<0>,0,sol::basic_reference<0> >::invoke<1>
+  3.06%  lua_pcallk
+  3.06%  luaD_pcall
+  3.06%  luaD_rawrunprotected
+  3.06%  monster::attack_target
+  3.06%  luaD_call
+  3.06%  luaD_callnoyield
+  3.06%  sol::basic_protected_function<sol::basic_reference<0>,0,sol::basic_reference<0> >::call<>
+  3.06%  luaV_execute
+  3.06%  cata::run_on_every_x_hooks
+  3.06%  sol::proxy_base<sol::table_proxy<sol::basic_table_core<1,sol::basic_reference<0> > & __ptr64,std::tuple<char const (& __ptr64)[5],char const (& __ptr6
+
+== callers of hottest self functions ==
+ZwWaitForAlertByThreadId:
+       35  RtlWaitOnAddress < WaitOnAddress < std::_Atomic_wait_direct<__int64,__int64> < cata::string_formatter::get_nth_arg_as<unsigned __int64,0,st
+       15  RtlWaitOnAddress < WaitOnAddress < std::_Atomic_wait_direct<__int64,__int64> < std::_Uninitialized_move<scent_type * __ptr64,std::allocator
+        3  RtlWaitOnAddress < WaitOnAddress < std::_Atomic_wait_direct<__int64,__int64> < mvwprintz<std::basic_string<char,std::char_traits<char>,std:
+mapbuffer::lookup_submap_in_memory:
+       26  mapbuffer_load_region::operator= < mapbuffer::for_each_simulated_submap_position < mapbuffer::for_each_simulated_submap < std::_Func_impl_no_alloc<`restore_on_out_of_scope<std::optio
+        4  submap_load_manager::is_loaded < submap_load_manager::is_simulated < map::process_items < game::do_turn
+        2  map::get_submap_at < map::get_submap_at < map::maptile_at_internal < map::maptile_at
+        1  map::get_submap_at < map::get_submap_at < map::has_flag_ter_or_furn < Creature::sees
+std::_Vector_iterator<std::_Vector_val<std::_Simple_types<coords::coord_point<tripoint,2,0> > > >::operator+:
+       27  mapbuffer_load_region::operator= < mapbuffer::for_each_simulated_submap_position < mapbuffer::for_each_simulated_submap < std::_Func_impl_no_alloc<`restore_on_out_of_scope<std::optio
+map::current_lightmap_source_signature:
+       23  map::invalidate_lightmap_caches_if_light_state_changed < map::build_map_cache < game::do_turn < std::basic_ofstream<char,std::char_traits<char> >::basic_ofs
+sound_event::operator=:
+       15  map::batch_flood_fill_sounds < game::do_turn < std::basic_ofstream<char,std::char_traits<char> >::basic_ofs < Catch::RunContext::invokeActiveTestCase
+NtAlertThreadByThreadId:
+        6  RtlWakeConditionVariable < _Cnd_signal < cata_thread_pool::submit < std::_Uninitialized_move<scent_type * __ptr64,std::allocator
+        4  RtlWakeConditionVariable < _Cnd_signal < cata_thread_pool::submit < cata::string_formatter::get_nth_arg_as<unsigned __int64,0,st
+        2  RtlWakeConditionVariable < _Cnd_signal < cata_thread_pool::submit < mvwprintz<std::basic_string<char,std::char_traits<char>,std:
+safe_reference<item>::operator*:
+       11  std::fill_n<std::_Vb_iterator<std::_Wrap_alloc<std::allocato < map::scent_blockers < scent_map::update < game::do_turn
+RtlAllocateHeap:
+        2  _malloc_base < operator new < item::item < null_item_reference
+        1  _malloc_base < operator new < item_contents::item_contents < item::item
+        1  _malloc_base < operator new < std::_Hash<std::_Uset_traits<std::pair<string_id<dimension>, < std::_Hash<std::_Umap_traits<coords::coord_point<tripoint,1,
+        1  RtlFreeHeap < _free_base < std::vector<monster_plan_t,std::allocator<monster_plan_t> >: < game::monmove
+RtlReleaseSRWLockExclusive:
+        7  _Mtx_unlock < mapbuffer::lookup_submap_in_memory < mapbuffer_load_region::operator= < mapbuffer::for_each_simulated_submap_position
+        1  _Mtx_unlock < mapbuffer::lookup_submap_in_memory < map::get_submap_at < map::get_submap_at
+        1  _Mtx_unlock < map::process_items < game::do_turn < std::basic_ofstream<char,std::char_traits<char> >::basic_ofs
+std::_Hash_array_representation<char>:
+        2  options_manager::get_option < calendar::eternal_season < sunset < sunset
+        1  std::_Hash<std::_Umap_traits<std::basic_string<char,std::cha < options_manager::get_option < calendar::eternal_season < sunset
+        1  std::_Hash<std::_Umap_traits<std::basic_string<char,std::cha < options_manager::get_option < Character::adjust_for_focus < Character::practice
+        1  options_manager::get_option < calendar::eternal_season < is_dawn < sunlight
+RtlFreeHeap:
+        2  _free_base < item::~item < null_item_reference < Character::primary_weapon
+        1  _free_base < std::_Tree_val<std::_Tree_simple_types<std::pair<string_id<b < char_encumbrance_data::operator= < Character::reset_encumbrance
+        1  _free_base < Catch::clara::detail::BoundFlagLambda<`Catch::clara::detail: < item::~item < null_item_reference
+        1  _free_base < monster::footsteps < monster::group_bash_skill < monster::decide_action
+scent_map::update:
+        6  game::do_turn < std::basic_ofstream<char,std::char_traits<char> >::basic_ofs < Catch::RunContext::invokeActiveTestCase < Catch::RunContext::runCurrentTest
+
+turn benchmark: 80 monsters, 200 item piles, 300 turns: 889.4 ms total, 2.965 ms/turn, 0 bubble resizes
+== self (462 samples) ==
+ 25.76%  ZwWaitForAlertByThreadId
+ 12.12%  mapbuffer::lookup_submap_in_memory
+  6.93%  std::_Vector_iterator<std::_Vector_val<std::_Simple_types<coords::coord_point<tripoint,2,0> > > >::operator+
+  6.71%  map::current_lightmap_source_signature
+  3.25%  safe_reference<item>::operator*
+  2.81%  sound_event::operator=
+  1.95%  NtAlertThreadByThreadId
+  1.73%  RtlAllocateHeap
+  1.30%  generic_factory<ter_t>::obj
+  1.08%  RtlAcquireSRWLockExclusive
+  1.08%  scent_map::update
+  0.87%  std::_Hash_array_representation<char>
+  0.87%  memset
+  0.87%  std::_Tree<std::_Tmap_traits<string_id<dimension>,std::unique_ptr<mapbuffer,std::default_delete<mapbuffer> >,std::less<string_id<dimension> >,std::all
+  0.87%  GetCurrentThreadId
+  0.87%  RtlFreeHeap
+  0.65%  RtlReleaseSRWLockExclusive
+  0.65%  std::_Hash<std::_Umap_traits<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,int,std::_Uhash_compare<std::basic_string<char,std::
+  0.65%  _Mtx_lock
+  0.65%  memcmp
+  0.65%  std::_Fnv1a_append_value<int>
+  0.65%  field::begin
+  0.65%  std::_Hash<std::_Uset_traits<sound_filter_key,std::_Uhash_compare<sound_filter_key,std::hash<sound_filter_key>,std::equal_to<sound_filter_key> >,std::
+  0.65%  RtlWakeConditionVariable
+  0.65%  map::build_sunlight_cache
+  0.43%  std::operator<=><char,std::char_traits<char>,std::allocator<char> >
+  0.43%  WideCharToMultiByte
+  0.43%  monster::process_turn
+  0.43%  cata::event_detail::make_event_helper<43,std::integer_sequence<unsigned __int64,0,1> >::operator()<bool const & __ptr64,std::basic_string<char,std::ch
+  0.43%  mapbuffer_registry::get
+  0.43%  map::inbounds
+  0.43%  reality_bubble_origin_from_player
+  0.43%  Creature::resists_effect
+  0.43%  map::build_map_cache
+  0.43%  player_reality_bubble_origin
+  0.43%  std::basic_string<char,std::char_traits<char>,std::allocator<char> >::basic_string<char,std::char_traits<char>,std::allocator<char> >
+  0.22%  abs_to_bub
+  0.22%  std::basic_string<wchar_t,std::char_traits<wchar_t>,std::allocator<wchar_t> >::basic_string<wchar_t,std::char_traits<wchar_t>,std::allocator<wchar_t> 
+  0.22%  std::_Tree<std::_Tmap_traits<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,int,std::less<std::basic_string<char,std::char_trait
+  0.22%  std::_Compressed_pair<std::allocator<std::_Tree_node<std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char> > const ,int>,void *
+  0.22%  get_heat_radiation
+  0.22%  map::field_at
+  0.22%  Character::abs_pos
+  0.22%  RtlWaitOnAddress
+  0.22%  std::_Uhash_compare<std::pair<string_id<dimension>,coords::coord_point<point,1,2> >,submap_load_manager::coord_pair_hash<coords::coord_point<point,1,2
+  0.22%  `anonymous namespace'::_Sorting::_Minmax_disp<2,`anonymous namespace'::_Sorting::_Traits_4,1>
+  0.22%  Character::check_and_recover_morale
+  0.22%  sol::stack::unqualified_check<sol::detail::as_value_tag<string_id<mutation_branch> >,sol::argument_handler<sol::types<bool,string_id<mutation_branch> 
+  0.22%  abs_to_bub
+  0.22%  mtype::get_footsteps
+  0.22%  Character::calc_encumbrance
+  0.22%  luaH_getint
+  0.22%  operator delete
+  0.22%  monster::move_to
+  0.22%  RtlSetBits
+  0.22%  Character::calc_all_parts_hp
+  0.22%  get_local_windpower
+  0.22%  sol::stack::push<char const * __ptr64,unsigned __int64>
+  0.22%  sunset
+  0.22%  sol::state_view::create_table
+
+== inclusive (462 samples) ==
+100.00%  RtlUserThreadStart
+100.00%  Catch::RunContext::runCurrentTest
+100.00%  Catch::RunContext::invokeActiveTestCase
+100.00%  std::basic_ofstream<char,std::char_traits<char> >::basic_ofstream<char,std::char_traits<char> >
+100.00%  Catch::RunContext::exceptionEarlyReported
+100.00%  __scrt_common_main_seh
+100.00%  Catch::Session::runInternal
+100.00%  Catch::RunContext::runTest
+100.00%  Catch::Session::run
+100.00%  main
+100.00%  BaseThreadInitThunk
+ 99.57%  game::do_turn
+ 25.76%  ZwWaitForAlertByThreadId
+ 25.76%  std::_Atomic_wait_direct<__int64,__int64>
+ 25.76%  RtlWaitOnAddress
+ 25.76%  WaitOnAddress
+ 20.78%  cata::string_formatter::get_nth_arg_as<unsigned __int64,0,std::basic_string<char,std::char_traits<char>,std::allocator<char> >,float & __ptr64,float &
+ 20.35%  mapbuffer_registry::for_each
+ 20.35%  std::_Func_impl_no_alloc<`restore_on_out_of_scope<std::optional<coords::coord_point<tripoint,1,0> > >::restore_on_out_of_scope<std::optional<coords::c
+ 20.35%  mapbuffer::for_each_simulated_submap
+ 20.35%  game::world_tick
+ 20.35%  mapbuffer::for_each_simulated_submap_position
+ 20.35%  mapbuffer_load_region::operator=
+ 19.91%  map::build_map_cache
+ 15.37%  game::monmove
+ 15.37%  mapbuffer::lookup_submap_in_memory
+ 12.99%  scent_map::update
+ 12.12%  map::update_visibility_cache
+ 12.12%  game::refresh_player_visibility_cache_if_needed
+  9.74%  std::_Vector_iterator<std::_Vector_val<std::_Simple_types<coords::coord_point<tripoint,2,0> > > >::operator+
+  8.87%  map::invalidate_lightmap_caches_if_light_state_changed
+  8.87%  map::current_lightmap_source_signature
+  6.71%  std::_Uninitialized_move<scent_type * __ptr64,std::allocator<scent_type> >
+  6.49%  monster::execute_action
+  4.76%  safe_reference<item>::operator*
+  4.76%  std::fill_n<std::_Vb_iterator<std::_Wrap_alloc<std::allocator<unsigned int> > >,int,bool>
+  4.76%  map::scent_blockers
+  4.33%  map::batch_flood_fill_sounds
+  3.90%  sound_event::operator=
+  3.68%  Character::update_bodytemp
+  3.68%  map::get_submap_at
+  3.46%  map::get_submap_at
+  2.81%  _Mtx_lock
+  2.81%  cata_thread_pool::submit
+  2.60%  monster::move_to
+  2.60%  _Cnd_signal
+  2.60%  RtlWakeConditionVariable
+  2.38%  Character::update_body
+  2.16%  map::move_cost
+  2.16%  game::mon_info_update
+  1.95%  NtAlertThreadByThreadId
+  1.95%  Creature::process_turn
+  1.95%  Creature::sees
+  1.95%  _malloc_base
+  1.95%  operator new
+  1.95%  RtlAllocateHeap
+  1.73%  mapbuffer_registry::get
+  1.73%  Character::recalculate_enchantment_cache
+  1.73%  monster::decide_action
+  1.73%  options_manager::get_option
+
+== callers of hottest self functions ==
+ZwWaitForAlertByThreadId:
+       89  RtlWaitOnAddress < WaitOnAddress < std::_Atomic_wait_direct<__int64,__int64> < cata::string_formatter::get_nth_arg_as<unsigned __int64,0,st
+       24  RtlWaitOnAddress < WaitOnAddress < std::_Atomic_wait_direct<__int64,__int64> < std::_Uninitialized_move<scent_type * __ptr64,std::allocator
+        5  RtlWaitOnAddress < WaitOnAddress < std::_Atomic_wait_direct<__int64,__int64> < mvwprintz<std::basic_string<char,std::char_traits<char>,std:
+        1  RtlSleepConditionVariableSRW < RtlAcquireSRWLockExclusive < _Mtx_lock < cata_thread_pool::submit
+mapbuffer::lookup_submap_in_memory:
+       52  mapbuffer_load_region::operator= < mapbuffer::for_each_simulated_submap_position < mapbuffer::for_each_simulated_submap < std::_Func_impl_no_alloc<`restore_on_out_of_scope<std::optio
+        1  map::get_submap_at < map::get_submap_at < map::has_flag_ter_or_furn < Creature::sees
+        1  submap_load_manager::is_loaded < submap_load_manager::is_simulated < map::process_items < game::do_turn
+        1  map::get_submap_at < map::get_submap_at < map::maptile_at_internal < map::maptile_at
+std::_Vector_iterator<std::_Vector_val<std::_Simple_types<coords::coord_point<tripoint,2,0> > > >::operator+:
+       32  mapbuffer_load_region::operator= < mapbuffer::for_each_simulated_submap_position < mapbuffer::for_each_simulated_submap < std::_Func_impl_no_alloc<`restore_on_out_of_scope<std::optio
+map::current_lightmap_source_signature:
+       31  map::invalidate_lightmap_caches_if_light_state_changed < map::build_map_cache < game::do_turn < std::basic_ofstream<char,std::char_traits<char> >::basic_ofs
+safe_reference<item>::operator*:
+       15  std::fill_n<std::_Vb_iterator<std::_Wrap_alloc<std::allocato < map::scent_blockers < scent_map::update < game::do_turn
+sound_event::operator=:
+       13  map::batch_flood_fill_sounds < game::do_turn < std::basic_ofstream<char,std::char_traits<char> >::basic_ofs < Catch::RunContext::invokeActiveTestCase
+NtAlertThreadByThreadId:
+        5  RtlWakeConditionVariable < _Cnd_signal < cata_thread_pool::submit < std::_Uninitialized_move<scent_type * __ptr64,std::allocator
+        4  RtlWakeConditionVariable < _Cnd_signal < cata_thread_pool::submit < cata::string_formatter::get_nth_arg_as<unsigned __int64,0,st
+RtlAllocateHeap:
+        2  _malloc_base < operator new < item::item < null_item_reference
+        1  _malloc_base < operator new < std::vector<monster * __ptr64,std::allocator<monster * __ptr < std::_Ref_fn<npc_dist_to_player>::operator()<std::shared_ptr
+        1  _malloc_base < operator new < std::vector<int,std::allocator<int> >::reserve < map::build_map_cache
+        1  _malloc_base < operator new < std::_Hash<std::_Uset_traits<std::pair<string_id<dimension>, < std::_Hash<std::_Umap_traits<coords::coord_point<tripoint,1,
+generic_factory<ter_t>::obj:
+        6  safe_reference<item>::operator* < std::fill_n<std::_Vb_iterator<std::_Wrap_alloc<std::allocato < map::scent_blockers < scent_map::update
+RtlAcquireSRWLockExclusive:
+        2  _Mtx_lock < mapbuffer::lookup_submap_in_memory < map::get_submap_at < map::get_submap_at
+        1  _Mtx_lock < mapbuffer::lookup_submap_in_memory < mapbuffer_load_region::operator= < mapbuffer::for_each_simulated_submap_position
+        1  _Mtx_lock < mapbuffer::lookup_submap_in_memory < submap_load_manager::is_loaded < submap_load_manager::is_simulated
+        1  _Mtx_lock < mapbuffer::lookup_submap_in_memory < mapbuffer::get_submap < mapbuffer::lookup_submap
+scent_map::update:
+        5  game::do_turn < std::basic_ofstream<char,std::char_traits<char> >::basic_ofs < Catch::RunContext::invokeActiveTestCase < Catch::RunContext::runCurrentTest
+std::_Hash_array_representation<char>:
+        1  std::_Hash<std::_Umap_traits<std::basic_string<char,std::cha < options_manager::get_option < calendar::eternal_season < sunset
+        1  options_manager::get_option < calendar::eternal_season < sunset < sunset
+        1  options_manager::get_option < calendar::eternal_season < sunrise < sunrise
+        1  std::_Hash<std::_Umap_traits<std::basic_string<char,std::cha < string_identity_static::string_id_intern < Character::absorb_hit < Creature::deal_damage
+
+turn benchmark: 80 monsters, 200 item piles, 300 turns: 904.6 ms total, 3.015 ms/turn, 0 bubble resizes
+== self (472 samples) ==
+ 20.97%  mapbuffer::lookup_submap_in_memory
+ 13.14%  ZwWaitForAlertByThreadId
+  7.42%  std::_Vector_iterator<std::_Vector_val<std::_Simple_types<coords::coord_point<tripoint,2,0> > > >::operator+
+  5.72%  map::current_lightmap_source_signature
+  3.18%  sound_event::operator=
+  2.75%  RtlReleaseSRWLockExclusive
+  2.33%  safe_reference<item>::operator*
+  2.12%  scent_map::update
+  1.48%  NtAlertThreadByThreadId
+  1.48%  RtlAllocateHeap
+  1.27%  generic_factory<ter_t>::obj
+  1.27%  reality_bubble_origin_from_player
+  1.27%  std::operator<=><char,std::char_traits<char>,std::allocator<char> >
+  1.06%  std::_Hash_array_representation<char>
+  1.06%  std::_Hash<std::_Umap_traits<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,int,std::_Uhash_compare<std::basic_string<char,std::
+  1.06%  map::batch_flood_fill_sounds
+  1.06%  Creature::has_effect
+  0.85%  std::_Fnv1a_append_value<int>
+  0.85%  RtlFreeHeap
+  0.64%  Character::abs_pos
+  0.64%  cata::event_detail::make_event_helper<43,std::integer_sequence<unsigned __int64,0,1> >::operator()<bool const & __ptr64,std::basic_string<char,std::ch
+  0.64%  std::_Tree<std::_Tmap_traits<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,void (__cdecl debug_menu::effect_edit_callback::*)(i
+  0.64%  memset
+  0.64%  monster::bub_pos
+  0.64%  string_id<enchantment_value>::obj
+  0.64%  _Mtx_lock
+  0.64%  map::has_floor
+  0.64%  mapbuffer_load_region::operator=
+  0.42%  std::_Func_impl_no_alloc<`restore_on_out_of_scope<std::optional<coords::coord_point<tripoint,1,0> > >::restore_on_out_of_scope<std::optional<coords::c
+  0.42%  damage_instance::begin
+  0.42%  map::veh_at
+  0.42%  rl_dist<tripoint,1,2>
+  0.42%  HeapFree
+  0.42%  divide_round_to_minus_infinity
+  0.42%  std::set<string_id<enchantment_flag>,std::less<string_id<enchantment_flag> >,std::allocator<string_id<enchantment_flag> > >::operator=
+  0.42%  RtlAcquireSRWLockExclusive
+  0.42%  coords::project_to<2,tripoint,1,0>
+  0.42%  monster::execute_action
+  0.42%  std::_Tree<std::_Tmap_traits<string_id<dimension>,std::unique_ptr<mapbuffer,std::default_delete<mapbuffer> >,std::less<string_id<dimension> >,std::all
+  0.42%  std::_Tree<std::_Tmap_traits<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,action_attributes,std::less<std::basic_string<char,s
+  0.21%  luaS_resize
+  0.21%  std::less<void>::operator()<std::basic_string<char,std::char_traits<char>,std::allocator<char> > & __ptr64,std::basic_string<char,std::char_traits<cha
+  0.21%  Character::sees
+  0.21%  luaS_new
+  0.21%  abs_to_bub
+  0.21%  Character::has_activity
+  0.21%  field::find_field
+  0.21%  monster::compute_plan
+  0.21%  is_outside_pocket_dimension_bounds
+  0.21%  player_reality_bubble_origin
+  0.21%  sol::stack::unqualified_checker<sol::detail::as_value_tag<Creature>,7,void>::check<Creature,int (__cdecl*& __ptr64)(lua_State * __ptr64,int,enum sol::
+  0.21%  memcmp
+  0.21%  monster::bash_skill
+  0.21%  Internal_EnumSystemLocales
+  0.21%  std::list<int_id<body_part_type>,std::allocator<int_id<body_part_type> > >::emplace_back<int_id<body_part_type> const & __ptr64>
+  0.21%  item::is_food
+  0.21%  Character::hardcoded_effects
+  0.21%  std::_Hash<std::_Umap_traits<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,options_manager::cOpt,std::_Uhash_compare<std::basic
+  0.21%  is_outside_pocket_dimension_bounds
+  0.21%  std::_Tree<std::_Tmap_traits<coords::coord_point<tripoint,1,3>,std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::less<coords::
+
+== inclusive (472 samples) ==
+100.00%  Catch::RunContext::runCurrentTest
+100.00%  Catch::RunContext::runTest
+100.00%  Catch::Session::run
+100.00%  main
+100.00%  Catch::Session::runInternal
+100.00%  Catch::RunContext::exceptionEarlyReported
+100.00%  std::basic_ofstream<char,std::char_traits<char> >::basic_ofstream<char,std::char_traits<char> >
+100.00%  Catch::RunContext::invokeActiveTestCase
+ 99.58%  game::do_turn
+ 99.58%  BaseThreadInitThunk
+ 99.58%  __scrt_common_main_seh
+ 99.58%  RtlUserThreadStart
+ 31.14%  game::world_tick
+ 31.14%  mapbuffer_registry::for_each
+ 31.14%  std::_Func_impl_no_alloc<`restore_on_out_of_scope<std::optional<coords::coord_point<tripoint,1,0> > >::restore_on_out_of_scope<std::optional<coords::c
+ 31.14%  mapbuffer::for_each_simulated_submap_position
+ 31.14%  mapbuffer::for_each_simulated_submap
+ 30.93%  mapbuffer_load_region::operator=
+ 25.00%  mapbuffer::lookup_submap_in_memory
+ 17.16%  game::monmove
+ 13.56%  std::_Vector_iterator<std::_Vector_val<std::_Simple_types<coords::coord_point<tripoint,2,0> > > >::operator+
+ 13.14%  ZwWaitForAlertByThreadId
+ 12.71%  std::_Atomic_wait_direct<__int64,__int64>
+ 12.71%  RtlWaitOnAddress
+ 12.71%  WaitOnAddress
+ 12.29%  scent_map::update
+  9.96%  map::build_map_cache
+  8.90%  map::invalidate_lightmap_caches_if_light_state_changed
+  8.90%  map::current_lightmap_source_signature
+  6.36%  cata::string_formatter::get_nth_arg_as<unsigned __int64,0,std::basic_string<char,std::char_traits<char>,std::allocator<char> >,float & __ptr64,float &
+  6.36%  monster::execute_action
+  5.93%  std::_Uninitialized_move<scent_type * __ptr64,std::allocator<scent_type> >
+  5.51%  game::refresh_player_visibility_cache_if_needed
+  5.51%  map::update_visibility_cache
+  5.08%  game::mon_info_update
+  4.45%  map::batch_flood_fill_sounds
+  4.24%  Creature::sees
+  4.24%  safe_reference<item>::operator*
+  3.60%  std::fill_n<std::_Vb_iterator<std::_Wrap_alloc<std::allocator<unsigned int> > >,int,bool>
+  3.60%  map::scent_blockers
+  3.39%  map::get_submap_at
+  3.39%  map::get_submap_at
+  3.18%  sound_event::operator=
+  2.97%  monster::move_to
+  2.75%  RtlReleaseSRWLockExclusive
+  2.75%  _Mtx_unlock
+  2.33%  map::move_cost
+  2.33%  map::process_items
+  2.33%  mvwprintz<std::basic_string<char,std::char_traits<char>,std::allocator<char> > & __ptr64>
+  2.33%  player_reality_bubble_origin
+  2.33%  Character::update_bodytemp
+  2.12%  cata::run_on_every_x_hooks
+  2.12%  sounds::process_sounds
+  2.12%  sol::proxy_base<sol::table_proxy<sol::basic_table_core<1,sol::basic_reference<0> > & __ptr64,std::tuple<char const (& __ptr64)[5],char const (& __ptr6
+  1.91%  monster::decide_action
+  1.91%  luaV_execute
+  1.91%  map::passable
+  1.91%  cata_thread_pool::submit
+  1.91%  luaD_call
+  1.91%  luaD_callnoyield
+
+== callers of hottest self functions ==
+mapbuffer::lookup_submap_in_memory:
+       90  mapbuffer_load_region::operator= < mapbuffer::for_each_simulated_submap_position < mapbuffer::for_each_simulated_submap < std::_Func_impl_no_alloc<`restore_on_out_of_scope<std::optio
+        4  submap_load_manager::is_loaded < submap_load_manager::is_simulated < map::process_items < game::do_turn
+        2  map::get_submap_at < map::get_submap_at < map::has_flag_ter_or_furn < Creature::sees
+        1  map::get_submap_at < map::get_submap_at < map::has_flag_ter_or_furn < monster::execute_action
+ZwWaitForAlertByThreadId:
+       28  RtlWaitOnAddress < WaitOnAddress < std::_Atomic_wait_direct<__int64,__int64> < cata::string_formatter::get_nth_arg_as<unsigned __int64,0,st
+       21  RtlWaitOnAddress < WaitOnAddress < std::_Atomic_wait_direct<__int64,__int64> < std::_Uninitialized_move<scent_type * __ptr64,std::allocator
+       11  RtlWaitOnAddress < WaitOnAddress < std::_Atomic_wait_direct<__int64,__int64> < mvwprintz<std::basic_string<char,std::char_traits<char>,std:
+        2  RtlSleepConditionVariableSRW < RtlAcquireSRWLockExclusive < _Mtx_lock < cata_thread_pool::submit
+std::_Vector_iterator<std::_Vector_val<std::_Simple_types<coords::coord_point<tripoint,2,0> > > >::operator+:
+       34  mapbuffer_load_region::operator= < mapbuffer::for_each_simulated_submap_position < mapbuffer::for_each_simulated_submap < std::_Func_impl_no_alloc<`restore_on_out_of_scope<std::optio
+        1  game::mon_info_update < game::do_turn < std::basic_ofstream<char,std::char_traits<char> >::basic_ofs < Catch::RunContext::invokeActiveTestCase
+map::current_lightmap_source_signature:
+       27  map::invalidate_lightmap_caches_if_light_state_changed < map::build_map_cache < game::do_turn < std::basic_ofstream<char,std::char_traits<char> >::basic_ofs
+sound_event::operator=:
+       15  map::batch_flood_fill_sounds < game::do_turn < std::basic_ofstream<char,std::char_traits<char> >::basic_ofs < Catch::RunContext::invokeActiveTestCase
+RtlReleaseSRWLockExclusive:
+       11  _Mtx_unlock < mapbuffer::lookup_submap_in_memory < mapbuffer_load_region::operator= < mapbuffer::for_each_simulated_submap_position
+        1  _Mtx_unlock < mapbuffer::lookup_submap_in_memory < map::get_submap_at < map::get_submap_at
+        1  _Mtx_unlock < mapbuffer::lookup_submap_in_memory < submap_load_manager::is_loaded < submap_load_manager::is_simulated
+safe_reference<item>::operator*:
+       11  std::fill_n<std::_Vb_iterator<std::_Wrap_alloc<std::allocato < map::scent_blockers < scent_map::update < game::do_turn
+scent_map::update:
+       10  game::do_turn < std::basic_ofstream<char,std::char_traits<char> >::basic_ofs < Catch::RunContext::invokeActiveTestCase < Catch::RunContext::runCurrentTest
+NtAlertThreadByThreadId:
+        6  RtlWakeConditionVariable < _Cnd_signal < cata_thread_pool::submit < std::_Uninitialized_move<scent_type * __ptr64,std::allocator
+        1  RtlWakeConditionVariable < _Cnd_signal < cata_thread_pool::submit < cata::string_formatter::get_nth_arg_as<unsigned __int64,0,st
+RtlAllocateHeap:
+        2  _malloc_base < operator new < item::item < null_item_reference
+        1  _malloc_base < operator new < Character::update_bodytemp < game::do_turn
+        1  _malloc_base < operator new < std::vector<monster * __ptr64,std::allocator<monster * __ptr < std::_Ref_fn<npc_dist_to_player>::operator()<std::shared_ptr
+        1  _malloc_base < operator new < std::unordered_map<int_id<monfaction>,int,std::hash<int_id<m < game::monmove
+generic_factory<ter_t>::obj:
+        4  safe_reference<item>::operator* < std::fill_n<std::_Vb_iterator<std::_Wrap_alloc<std::allocato < map::scent_blockers < scent_map::update
+        1  get_heat_radiation < Character::update_bodytemp < game::do_turn < std::basic_ofstream<char,std::char_traits<char> >::basic_ofs
+        1  scent_map::update < game::do_turn < std::basic_ofstream<char,std::char_traits<char> >::basic_ofs < Catch::RunContext::invokeActiveTestCase
+reality_bubble_origin_from_player:
+        4  player_reality_bubble_origin < abs_to_bub < map::current_lightmap_source_signature < map::invalidate_lightmap_caches_if_light_state_changed
+        2  player_reality_bubble_origin < abs_to_bub < monster::bub_pos < Creature::sees
+
