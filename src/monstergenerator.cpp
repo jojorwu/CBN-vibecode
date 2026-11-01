@@ -4,6 +4,7 @@
 #include "bodypart.h"
 #include "calendar.h"
 #include "catacharset.h"
+#include "catalua_icallback_actor.h"
 #include "creature.h"
 #include "damage.h"
 #include "debug.h"

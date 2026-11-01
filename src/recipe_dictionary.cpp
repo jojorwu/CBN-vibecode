@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <utility>
 
+#include "catalua_icallback_actor.h"
 #include "utils/algo.h"
 #include "cata_utility.h"
 #include "debug.h"

@@ -1,4 +1,5 @@
 #include "mutation_data.h" // IWYU pragma: associated
+#include "catalua_icallback_actor.h"
 #include "generic_readers.h"
 #include "mutation.h" // IWYU pragma: associated
 

@@ -1,4 +1,5 @@
 #include "catalua_creature_filters.h"
+#include "catalua_sol.h"
 
 #include <functional>
 #include <string>

@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "catalua.h"
-#include "catalua_icallback_actor.h"
+class lua_monster_callback_actor;
 #include "catalua_type_operators.h"
 #include "enum_bitset.h"
 #include "enums.h"

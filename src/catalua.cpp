@@ -13,6 +13,7 @@
 #include <vector>
 
 #include "enchantments/enchantment_condition.h"
+#include "enchantments/enchantment_condition_lua.h"
 #include "iexamine.h"
 #include "monster.h"
 #include "monstergenerator.h"

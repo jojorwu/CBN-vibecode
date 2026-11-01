@@ -1,4 +1,5 @@
 #include "enchantment_condition.h"
+#include "enchantment_condition_lua.h"
 
 #include "assign.h"
 #include "catalua_impl.h"

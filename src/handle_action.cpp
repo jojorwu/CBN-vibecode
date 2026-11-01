@@ -14,6 +14,7 @@
 #include "catacharset.h"
 #include "catalua.h"
 #include "catalua_hooks.h"
+#include "catalua_icallback_actor.h"
 #include "character.h"
 #include "character_display.h"
 #include "character_martial_arts.h"
