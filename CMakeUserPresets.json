@@ -1,17 +1,44 @@
 {
-  "version": 2,
+  "version": 3,
   "configurePresets": [
     {
       "name": "windows-ninja-msvc",
       "inherits": "windows-tiles-sounds-x64-msvc",
-      "displayName": "Windows Tiles Sounds x64 MSVC (Ninja + ccache)",
+      "displayName": "Windows Tiles Sounds x64 MSVC (Ninja + ccache + PCH, fast dev)",
       "generator": "Ninja Multi-Config",
       "cacheVariables": {
         "CMAKE_PROJECT_INCLUDE_BEFORE": "${sourceDir}/build-scripts/windows-tiles-sounds-x64-msvc.cmake",
         "CMAKE_MAKE_PROGRAM": "C:/Program Files (x86)/Microsoft Visual Studio/18/BuildTools/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe",
         "CATA_CCACHE": "ON",
         "CCACHE_FOUND": "C:/Users/maksi/AppData/Local/Microsoft/WinGet/Packages/Ccache.Ccache_Microsoft.Winget.Source_8wekyb3d8bbwe/ccache-4.14.1-windows-x86_64/ccache.exe",
-        "VCPKG_INSTALLED_DIR": "${sourceDir}/out/build/windows-tiles-sounds-x64-msvc/vcpkg_installed"
+        "VCPKG_INSTALLED_DIR": "${sourceDir}/out/build/windows-tiles-sounds-x64-msvc/vcpkg_installed",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "OFF",
+        "CATA_PCH": "ON",
+        "LUA_DOCS_ON_BUILD": "OFF",
+        "CATA_MSVC_FAST_LINK": "ON"
+      }
+    },
+    {
+      "name": "windows-ninja-msvc-unity",
+      "inherits": "windows-ninja-msvc",
+      "displayName": "Windows MSVC Ninja — unity build (fastest clean build)",
+      "binaryDir": "${sourceDir}/out/build/windows-ninja-msvc-unity",
+      "cacheVariables": {
+        "USE_UNITY_BUILD": "ON"
+      }
+    },
+    {
+      "name": "linux-dev",
+      "inherits": "linux-full",
+      "displayName": "Linux dev (Tiles, Sounds; no clang-tidy plugin / Tracy / Lua docs)",
+      "binaryDir": "${sourceDir}/out/build/linux-dev",
+      "cacheVariables": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "OFF",
+        "CATA_PCH": "ON",
+        "CATA_CLANG_TIDY_PLUGIN": "OFF",
+        "USE_TRACY": "OFF",
+        "LIBBACKTRACE": "OFF",
+        "LUA_DOCS_ON_BUILD": "OFF"
       }
     }
   ],
@@ -21,6 +48,17 @@
       "configurePreset": "windows-ninja-msvc",
       "configuration": "RelWithDebInfo",
       "targets": ["cataclysm-bn-tiles"]
+    },
+    {
+      "name": "windows-ninja-game-and-tests",
+      "configurePreset": "windows-ninja-msvc",
+      "configuration": "RelWithDebInfo",
+      "targets": ["cataclysm-bn-tiles", "cata_test-tiles"]
+    },
+    {
+      "name": "linux-dev",
+      "configurePreset": "linux-dev",
+      "targets": ["cataclysm-bn-tiles", "cata_test-tiles"]
     }
   ]
 }

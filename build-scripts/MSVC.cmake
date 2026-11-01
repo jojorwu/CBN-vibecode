@@ -68,16 +68,28 @@ add_compile_definitions(
     LOCALIZE
     USE_VCPKG
 )
+# Release keeps the full release-grade link. Debug/RelWithDebInfo are the
+# edit-compile-run configs: skip COMDAT folding/elimination and use FASTLINK
+# PDBs (debug info stays in the .obj files, so keep the build dir around when
+# debugging). Set CATA_MSVC_FAST_LINK=OFF if you need a self-contained PDB
+# (e.g. to ship RelWithDebInfo builds or for dbghelp crash backtraces).
+option(CATA_MSVC_FAST_LINK "Use /DEBUG:FASTLINK and no /OPT:REF,ICF for non-Release configs" ON)
 add_link_options(
-    /DEBUG
-    /OPT:REF
-    /OPT:ICF
     /LTCG:OFF
     /MANIFEST:NO
     /INCREMENTAL:NO
     /DYNAMICBASE
     /NXCOMPAT
 )
+if (CATA_MSVC_FAST_LINK)
+    add_link_options(
+        "$<IF:$<CONFIG:Release>,/DEBUG:FULL,/DEBUG:FASTLINK>"
+        "$<IF:$<CONFIG:Release>,/OPT:REF,/OPT:NOREF>"
+        "$<IF:$<CONFIG:Release>,/OPT:ICF,/OPT:NOICF>"
+    )
+else ()
+    add_link_options(/DEBUG /OPT:REF /OPT:ICF)
+endif ()
 
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded")
 

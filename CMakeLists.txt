@@ -795,8 +795,15 @@ if (CCACHE_FOUND AND CATA_CCACHE)
 
     set(CMAKE_C_COMPILER_LAUNCHER   ${CATA_CCACHE_CMD})
     set(CMAKE_CXX_COMPILER_LAUNCHER ${CATA_CCACHE_CMD})
-    set(CMAKE_C_LINKER_LAUNCHER     ${CATA_CCACHE_CMD})
-    set(CMAKE_CXX_LINKER_LAUNCHER   ${CATA_CCACHE_CMD})
+    # No linker launcher: ccache does not cache links, it only adds a process per link.
+endif ()
+
+# UNITY_BUILD is a *target* property initialised from CMAKE_UNITY_BUILD when the
+# target is created, so this must run before add_subdirectory(src/tests).
+# (The old set_property(GLOBAL ...) at the end of this file had no effect.)
+if (USE_UNITY_BUILD)
+    set(CMAKE_UNITY_BUILD ON)
+    set(CMAKE_UNITY_BUILD_BATCH_SIZE 8 CACHE STRING "Sources per unity batch")
 endif ()
 
 add_subdirectory(src)
@@ -987,6 +994,3 @@ add_custom_target(uninstall
         "${CMAKE_COMMAND}"
         -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
 
-if (USE_UNITY_BUILD)
-    set_property(GLOBAL PROPERTY UNITY_BUILD ON)
-endif ()
