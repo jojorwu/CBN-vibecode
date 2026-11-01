@@ -1,7 +1,6 @@
 #pragma once
 
 #include "calendar.h"
-#include "catalua_icallback_actor.h"
 #include "coordinates.h"
 #include "damage.h"
 #include "data_vars.h"

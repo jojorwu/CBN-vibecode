@@ -9,7 +9,7 @@
 #include <unordered_set>
 #include <vector>
 
-#include "catalua_icallback_actor.h"
+class lua_recipe_actor;
 #include "recipe.h"
 #include "type_id.h"
 

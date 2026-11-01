@@ -9,6 +9,7 @@
 #include "calendar.h"
 #include "cata_utility.h"
 #include "catalua_hooks.h"
+#include "catalua_icallback_actor.h"
 #include "catalua_sol.h"
 #include "character.h"
 #include "character_functions.h"

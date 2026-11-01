@@ -1,6 +1,7 @@
 #include "avatar.h"
 #include "bodypart.h"
 #include "calendar.h"
+#include "catalua_icallback_actor.h"
 #include "character.h"
 #include "character_functions.h"
 #include "creature.h"

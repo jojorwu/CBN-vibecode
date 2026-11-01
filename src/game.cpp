@@ -9,6 +9,7 @@
 #include "activity_handlers.h"
 #include "activity_time_cadence.h"
 #include "activity_type.h"
+#include "afterimage.h"
 #include "armor_layers.h"
 #include "artifact.h"
 #include "auto_note.h"
@@ -1327,6 +1328,7 @@ bool game::start_game()
         }
     }
 
+    afterimage::clear();
     cata::run_hooks( "on_game_started" );
     return true;
 }

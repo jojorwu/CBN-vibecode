@@ -1,0 +1,41 @@
+[
+  {
+    "id": "bio_sandevistan_mk1",
+    "copy-from": "bionic_general",
+    "type": "BIONIC_ITEM",
+    "name": { "str": "Sandevistan Mk.1 CBM" },
+    "looks_like": "bio_int_enhancer",
+    "description": "A civilian-grade spinal speedware unit, still sealed in sterile wrap.  The installation manual covers three pages of warnings about heat and neural strain.",
+    "price": "18000 USD",
+    "weight": "1400 g",
+    "difficulty": 7
+  },
+  {
+    "id": "bio_sandevistan",
+    "copy-from": "bionic_general",
+    "type": "BIONIC_ITEM",
+    "name": { "str": "Military Sandevistan CBM" },
+    "looks_like": "bio_int_enhancer",
+    "description": "A matte-black military speedware spine stamped with serial numbers that have been ground off.  The heat sinks along its length are scorched.  Whoever wore it before you probably did not stop in time.",
+    "price": "95000 USD",
+    "weight": "2200 g",
+    "difficulty": 9
+  },
+  {
+    "type": "item_group",
+    "id": "bionics_mil",
+    "items": [ [ "bio_sandevistan_mk1", 4 ], [ "bio_sandevistan", 1 ] ]
+  },
+  {
+    "type": "item_group",
+    "id": "bionics_sci",
+    "subtype": "distribution",
+    "entries": [ { "item": "bio_sandevistan_mk1", "prob": 3 } ]
+  },
+  {
+    "type": "item_group",
+    "id": "bionics_op",
+    "subtype": "distribution",
+    "entries": [ { "item": "bio_sandevistan", "prob": 2 } ]
+  }
+]

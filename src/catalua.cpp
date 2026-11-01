@@ -1,5 +1,6 @@
 #include "catalua.h"
 
+#include "afterimage.h"
 #include "debug.h"
 
 #include <algorithm>
@@ -13,6 +14,7 @@
 #include <vector>
 
 #include "enchantments/enchantment_condition.h"
+#include "enchantments/enchantment_condition_lua.h"
 #include "iexamine.h"
 #include "monster.h"
 #include "monstergenerator.h"
@@ -1276,6 +1278,8 @@ void run_on_game_save_hooks( lua_state &state )
 
 void run_on_game_load_hooks( lua_state &state )
 {
+    // Afterimages belong to the previous session; a mod that drew them may not be loaded now.
+    afterimage::clear();
     run_hooks( "on_game_load", nullptr, { .state = &state } );
 }
 

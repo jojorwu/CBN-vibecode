@@ -2,6 +2,7 @@
 
 #include "assign.h"
 #include "bodypart.h"
+#include "catalua_icallback_actor.h"
 #include "character.h"
 #include "creature.h"
 #include "debug.h"

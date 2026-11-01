@@ -23,6 +23,7 @@
 #include "bionics.h"
 #include "bodypart.h"
 #include "calendar.h"
+#include "catalua_icallback_actor.h"
 #include "character.h"
 #include "character_functions.h"
 #include "character_martial_arts.h"

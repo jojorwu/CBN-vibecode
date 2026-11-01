@@ -20,7 +20,7 @@ if (BUILD_TESTING)
 
         add_test(
             NAME test-tiles
-            COMMAND sh -c "$<TARGET_FILE:cata_test-tiles> --rng-seed time"
+            COMMAND $<TARGET_FILE:cata_test-tiles> --rng-seed time
             WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
         if (CATA_USE_PCH)
@@ -41,7 +41,7 @@ if (BUILD_TESTING)
 
         add_test(
             NAME test
-            COMMAND sh -c "$<TARGET_FILE:cata_test> --rng-seed time"
+            COMMAND $<TARGET_FILE:cata_test> --rng-seed time
             WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
         if (CATA_USE_PCH)

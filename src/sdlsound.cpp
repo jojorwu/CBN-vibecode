@@ -15,6 +15,7 @@
 
 #include "cached_options.h"
 #include "debug.h"
+#include "filesystem.h"
 #include "init.h"
 #include "json.h"
 #include "messages.h"
@@ -451,7 +452,12 @@ static auto get_sfx_resource( const int resource_id ) -> MIX_Audio *
 {
     sound_effect_resource &resource = sfx_resources.resource[resource_id];
     if( !resource.audio ) {
-        const std::string path = current_soundpack_path + "/" + resource.path;
+        auto path = current_soundpack_path + "/" + resource.path;
+        // Mods ship their own sounds as data-relative paths ("mods/<mod>/sound/x.ogg"),
+        // since they can't know which soundpack directory is active.
+        if( !file_exist( path ) && file_exist( PATH_INFO::datadir() + resource.path ) ) {
+            path = PATH_INFO::datadir() + resource.path;
+        }
         // SFX are predecoded for low-latency playback.
         resource.audio.reset( MIX_LoadAudio( g_mixer, path.c_str(), true ) );
         if( !resource.audio ) {
