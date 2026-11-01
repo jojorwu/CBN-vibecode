@@ -1,0 +1,142 @@
+[
+  {
+    "id": "fd_sande_trail_1",
+    "type": "field_type",
+    "//": "Sandevistan afterimage (red). Spawned/removed by main.lua; half_life is only a safety net.",
+    "intensity_levels": [
+      {
+        "name": "afterimage",
+        "sym": "@",
+        "color": "light_red",
+        "transparent": true,
+        "light_emitted": 2,
+        "light_color": "#ff2a2a"
+      }
+    ],
+    "half_life": "4 turns",
+    "priority": 9,
+    "display_field": true,
+    "display_items": true,
+    "tint": "#ff2a2a",
+    "phase": "gas"
+  },
+  {
+    "id": "fd_sande_trail_2",
+    "type": "field_type",
+    "//": "Sandevistan afterimage (orange). Spawned/removed by main.lua; half_life is only a safety net.",
+    "intensity_levels": [
+      {
+        "name": "afterimage",
+        "sym": "@",
+        "color": "brown",
+        "transparent": true,
+        "light_emitted": 2,
+        "light_color": "#ff8c1a"
+      }
+    ],
+    "half_life": "4 turns",
+    "priority": 9,
+    "display_field": true,
+    "display_items": true,
+    "tint": "#ff8c1a",
+    "phase": "gas"
+  },
+  {
+    "id": "fd_sande_trail_3",
+    "type": "field_type",
+    "//": "Sandevistan afterimage (yellow). Spawned/removed by main.lua; half_life is only a safety net.",
+    "intensity_levels": [
+      {
+        "name": "afterimage",
+        "sym": "@",
+        "color": "yellow",
+        "transparent": true,
+        "light_emitted": 2,
+        "light_color": "#ffe81a"
+      }
+    ],
+    "half_life": "4 turns",
+    "priority": 9,
+    "display_field": true,
+    "display_items": true,
+    "tint": "#ffe81a",
+    "phase": "gas"
+  },
+  {
+    "id": "fd_sande_trail_4",
+    "type": "field_type",
+    "//": "Sandevistan afterimage (green). Spawned/removed by main.lua; half_life is only a safety net.",
+    "intensity_levels": [
+      {
+        "name": "afterimage",
+        "sym": "@",
+        "color": "light_green",
+        "transparent": true,
+        "light_emitted": 2,
+        "light_color": "#2aff6a"
+      }
+    ],
+    "half_life": "4 turns",
+    "priority": 9,
+    "display_field": true,
+    "display_items": true,
+    "tint": "#2aff6a",
+    "phase": "gas"
+  },
+  {
+    "id": "fd_sande_trail_5",
+    "type": "field_type",
+    "//": "Sandevistan afterimage (cyan). Spawned/removed by main.lua; half_life is only a safety net.",
+    "intensity_levels": [
+      {
+        "name": "afterimage",
+        "sym": "@",
+        "color": "light_cyan",
+        "transparent": true,
+        "light_emitted": 2,
+        "light_color": "#1affff"
+      }
+    ],
+    "half_life": "4 turns",
+    "priority": 9,
+    "display_field": true,
+    "display_items": true,
+    "tint": "#1affff",
+    "phase": "gas"
+  },
+  {
+    "id": "fd_sande_trail_6",
+    "type": "field_type",
+    "//": "Sandevistan afterimage (blue). Spawned/removed by main.lua; half_life is only a safety net.",
+    "intensity_levels": [
+      {
+        "name": "afterimage",
+        "sym": "@",
+        "color": "light_blue",
+        "transparent": true,
+        "light_emitted": 2,
+        "light_color": "#3a6bff"
+      }
+    ],
+    "half_life": "4 turns",
+    "priority": 9,
+    "display_field": true,
+    "display_items": true,
+    "tint": "#3a6bff",
+    "phase": "gas"
+  },
+  {
+    "id": "fd_sande_trail_7",
+    "type": "field_type",
+    "//": "Sandevistan afterimage (violet). Spawned/removed by main.lua; half_life is only a safety net.",
+    "intensity_levels": [
+      { "name": "afterimage", "sym": "@", "color": "pink", "transparent": true, "light_emitted": 2, "light_color": "#c43aff" }
+    ],
+    "half_life": "4 turns",
+    "priority": 9,
+    "display_field": true,
+    "display_items": true,
+    "tint": "#c43aff",
+    "phase": "gas"
+  }
+]

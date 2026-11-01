@@ -1,0 +1,37 @@
+[
+  {
+    "type": "effect_type",
+    "id": "sande_vision",
+    "//": "Applied by the bionic's ACTIVE enchantment. EFFECT_NIGHT_VISION switches the renderer to the green, desaturated night-vision filter: that is the Sandevistan 'world goes green' look.",
+    "name": [ "Sandevistan engaged" ],
+    "desc": [ "The world crawls by in a flat green haze.  Everything is so slow." ],
+    "rating": "good",
+    "max_intensity": 1,
+    "flags": [ "EFFECT_NIGHT_VISION" ]
+  },
+  {
+    "type": "effect_type",
+    "id": "sande_heat",
+    "name": [ "Spine warm", "Spine hot", "Spine CRITICAL" ],
+    "desc": [
+      "Your Sandevistan housing is warming up.",
+      "Your spine burns.  The Sandevistan is close to its limit.",
+      "Your vision swims and your teeth ache.  Shut it down NOW."
+    ],
+    "rating": "bad",
+    "max_intensity": 3,
+    "base_mods": { "per_mod": [ -1 ] },
+    "scaling_mods": { "per_mod": [ -1 ], "dex_mod": [ -1 ] },
+    "show_in_info": true
+  },
+  {
+    "type": "effect_type",
+    "id": "sande_cooldown",
+    "name": [ "Sandevistan cooling down" ],
+    "desc": [ "The heat sinks along your spine tick as they cool.  The Sandevistan will not engage until they do." ],
+    "rating": "bad",
+    "max_intensity": 1,
+    "base_mods": { "dex_mod": [ -1 ] },
+    "show_in_info": true
+  }
+]

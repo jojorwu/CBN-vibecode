@@ -1,0 +1,52 @@
+[
+  {
+    "type": "mod_tileset",
+    "compatibility": [ "UNDEAD_PEOPLE_BASE", "UNDEAD_PEOPLE" ],
+    "tiles-new": [
+      {
+        "file": "gfx/sandevistan_normal.png",
+        "tiles": [
+          { "id": "bio_sandevistan_mk1", "fg": 0 },
+          { "id": "bio_sandevistan", "fg": 1 },
+          { "id": "fd_sande_trail_1", "fg": 2, "rotates": false },
+          { "id": "fd_sande_trail_2", "fg": 3, "rotates": false },
+          { "id": "fd_sande_trail_3", "fg": 4, "rotates": false },
+          { "id": "fd_sande_trail_4", "fg": 5, "rotates": false },
+          { "id": "fd_sande_trail_5", "fg": 6, "rotates": false },
+          { "id": "fd_sande_trail_6", "fg": 7, "rotates": false },
+          { "id": "fd_sande_trail_7", "fg": 8, "rotates": false }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "mod_tileset",
+    "compatibility": [ "UNDEAD_PEOPLE_BASE", "UNDEAD_PEOPLE" ],
+    "tiles-new": [
+      {
+        "file": "gfx/sandevistan_large.png",
+        "sprite_width": 64,
+        "sprite_height": 80,
+        "sprite_offset_x": -16,
+        "sprite_offset_y": -48,
+        "tiles": [
+          {
+            "id": "overlay_effect_sande_vision",
+            "fg": [
+              { "weight": 10, "sprite": 0 },
+              { "weight": 10, "sprite": 1 },
+              { "weight": 10, "sprite": 2 },
+              { "weight": 10, "sprite": 3 }
+            ],
+            "animated": true
+          },
+          {
+            "id": "overlay_effect_sande_heat",
+            "fg": [ { "weight": 10, "sprite": 4 }, { "weight": 10, "sprite": 5 }, { "weight": 10, "sprite": 6 } ],
+            "animated": true
+          }
+        ]
+      }
+    ]
+  }
+]

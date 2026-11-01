@@ -1,0 +1,12 @@
+[
+  {
+    "type": "MOD_INFO",
+    "id": "sandevistan",
+    "name": "Sandevistan",
+    "authors": [ "maksi" ],
+    "description": "Adds the Sandevistan: a spinal speedware CBM that slows the world to a crawl.  While it runs your vision turns green, monsters nearly freeze and you leave a trail of rainbow afterimages.  Every move drains bionic power, and pushing it too hard overheats the unit: nosebleed, stun and a forced cooldown.  Both units can be picked at character creation.",
+    "category": "content",
+    "lua_api_version": 2,
+    "dependencies": [ "bn" ]
+  }
+]

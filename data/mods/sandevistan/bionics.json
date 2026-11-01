@@ -1,0 +1,50 @@
+[
+  {
+    "id": "bio_sandevistan_mk1",
+    "type": "bionic",
+    "name": { "str": "Sandevistan Mk.1" },
+    "description": "A civilian-grade speedware unit grafted along your spine.  When engaged it floods your nervous system with synthetic signal boosters: your speed rises sharply, the world around you slows, and your vision turns a flat green.  Running it builds heat in the spinal housing and drains bionic power with every move.  Let it overheat and it shuts itself down, taking a piece of you with it.",
+    "occupied_bodyparts": [ [ "torso", 6 ], [ "head", 1 ], [ "leg_l", 2 ], [ "leg_r", 2 ] ],
+    "flags": [ "BIONIC_TOGGLED" ],
+    "act_cost": "60 kJ",
+    "react_cost": "8 kJ",
+    "time": 1,
+    "points": 4,
+    "bio_enchantments": [
+      {
+        "conditions": [ "ACTIVE" ],
+        "values": [
+          { "value": "SPEED", "multiply": 1.5 },
+          { "value": "MOVE_COST", "multiply": -0.3 },
+          { "value": "ATTACK_COST", "multiply": -0.3 }
+        ],
+        "ench_effects": [ { "effect": "sande_vision", "intensity": 1 } ]
+      }
+    ],
+    "starting_bionic": true
+  },
+  {
+    "id": "bio_sandevistan",
+    "type": "bionic",
+    "name": { "str": "Military Sandevistan" },
+    "description": "A military prototype speedware spine, far beyond anything sold on the street.  When engaged, everything around you all but stops: bullets hang in the air, monsters freeze mid-step, and you move through it trailing afterimages in every color of the spectrum.  It runs hot, very hot, and it drinks bionic power with every move you make.  Overheat it and the shutdown is brutal.",
+    "occupied_bodyparts": [ [ "torso", 10 ], [ "head", 2 ], [ "arm_l", 2 ], [ "arm_r", 2 ], [ "leg_l", 3 ], [ "leg_r", 3 ] ],
+    "flags": [ "BIONIC_TOGGLED" ],
+    "act_cost": "125 kJ",
+    "react_cost": "20 kJ",
+    "time": 1,
+    "points": 7,
+    "bio_enchantments": [
+      {
+        "conditions": [ "ACTIVE" ],
+        "values": [
+          { "value": "SPEED", "multiply": 3.0 },
+          { "value": "MOVE_COST", "multiply": -0.5 },
+          { "value": "ATTACK_COST", "multiply": -0.5 }
+        ],
+        "ench_effects": [ { "effect": "sande_vision", "intensity": 1 } ]
+      }
+    ],
+    "starting_bionic": true
+  }
+]
