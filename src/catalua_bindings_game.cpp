@@ -1,3 +1,4 @@
+#include "afterimage.h"
 #include "avatar.h"
 #include "cached_options.h"
 #include "catalua_bindings.h"
@@ -679,6 +680,26 @@ void cata::detail::reg_game_api( sol::state &lua )
         vec.push_back( f );
         hooks.push_back( on_every_x_hooks{ interval, vec } );
     } );
+
+    DOC( "Draws a translucent, tinted copy of the avatar at a map position (tiles mode only).  " );
+    DOC( "Takes a table: `pos` (TripointBubMs), `color` (\"#RRGGBB\"), optional `alpha` (0-255, default 160)." );
+    luna::set_fx( lib, "add_afterimage", []( const sol::table &opts ) -> void {
+        const auto pos = opts.get<sol::optional<tripoint_bub_ms>>( "pos" );
+        const auto color = RGBColor::try_parse( opts.get_or<std::string>( "color", "" ) );
+        if( !pos || !color )
+        {
+            throw std::runtime_error( "add_afterimage: needs pos (TripointBubMs) and color (\"#RRGGBB\")" );
+        }
+        afterimage::add( {
+            .pos = bub_to_abs( *pos ),
+            .tint = *color,
+            .alpha = static_cast<uint8_t>( std::clamp( opts.get_or( "alpha", 160 ), 0, 255 ) ),
+        } );
+    } );
+    DOC( "Removes every afterimage added with add_afterimage." );
+    luna::set_fx( lib, "clear_afterimages", []() -> void { afterimage::clear(); } );
+    DOC( "True when the tiles renderer is active, i.e. add_afterimage will be visible." );
+    luna::set_fx( lib, "afterimages_supported", []() -> bool { return use_tiles; } );
 
     DOC( "Register a Lua-defined action menu entry in the in-game action menu.  " );
     DOC( "Takes a table with keys:  " );

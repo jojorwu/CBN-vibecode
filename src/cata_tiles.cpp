@@ -1,6 +1,7 @@
 #include "units_temperature.h"
 #if defined(TILES)
 #    include "action.h"
+#    include "afterimage.h"
 #    include "avatar.h"
 #    include "cached_options.h"
 #    include "calendar.h"
@@ -146,6 +147,18 @@ static const std::array<std::string, 14> TILE_CATEGORY_IDS = {{
 
 namespace
 {
+
+/// Set while an afterimage is being drawn; draw_sprite_at then forces its tint and alpha.
+auto ghost_override = std::optional<afterimage::ghost>{};
+
+/// Mostly-flat colour fill that keeps a hint of the sprite's shading.
+auto ghost_tint( const afterimage::ghost &gh ) -> tint_config
+{
+    auto tint = tint_config{ gh.tint };
+    tint.color.a = 190;
+    tint.blend_mode = tint_blend_mode::normal;
+    return tint;
+}
 
 std::string get_ascii_tile_id( const uint32_t sym, const int FG, const int BG )
 {
@@ -4863,6 +4876,9 @@ bool cata_tiles::draw_sprite_at( const tile_type &tile, point_bub_ms p,
     } else if( effective_tint.color == TILESET_NO_COLOR && tile.default_tint.has_value() ) {
         effective_tint.color = tile.default_tint.value();
     }
+    if( ghost_override ) {
+        effective_tint = ghost_tint( *ghost_override );
+    }
 
     // Use active_warp_hash if no explicit warp_hash provided (for character rendering)
     const size_t effective_warp_hash = ( warp_hash == TILESET_NO_WARP ) ? active_warp_hash : warp_hash;
@@ -4898,7 +4914,7 @@ bool cata_tiles::draw_sprite_at( const tile_type &tile, point_bub_ms p,
     destination.w = width * tile_width * tile.pixelscale / tileset_ptr->get_tile_width();
     destination.h = height * tile_height * tile.pixelscale / tileset_ptr->get_tile_height();
 
-    const auto should_apply_light_tint = light_tint.has_value() &&
+    const auto should_apply_light_tint = !ghost_override && light_tint.has_value() &&
                                          ( fx_type == tileset_fx_type::none ||
                                            fx_type == tileset_fx_type::shadow );
 
@@ -4927,7 +4943,7 @@ bool cata_tiles::draw_sprite_at( const tile_type &tile, point_bub_ms p,
         int ret = 0;
 
         // UV warping is now handled in get_or_default, so we just render normally
-        sprite_tex->set_alpha_mod( 255 );
+        sprite_tex->set_alpha_mod( ghost_override ? ghost_override->alpha : 255 );
         ret = sprite_tex->render_copy_ex( renderer, &destination, rotation, nullptr, flip );
         if( should_apply_light_tint && !render_dynamic_light_tint( rotation, flip ) ) {
             ret = 0;
@@ -5914,6 +5930,16 @@ bool cata_tiles::draw_critter_at( const tripoint_bub_ms &p, lit_level ll, int &h
     bool is_player;
     bool sees_player;
     Attitude attitude;
+    if( !invisible[0] && !afterimage::all().empty() ) {
+        const auto abs_p = bub_to_abs( p );
+        for( const auto &gh : afterimage::all()
+             | std::views::filter( [&]( const auto & a ) { return a.pos == abs_p; } ) ) {
+            ghost_override = gh;
+            const auto reset_ghost = on_out_of_scope( []() { ghost_override.reset(); } );
+            auto ghost_height = height_3d;
+            draw_entity_with_overlays( g->u, p, ll, ghost_height );
+        }
+    }
     const auto override = monster_override.find( p );
     if( override != monster_override.end() ) {
         const mtype_id id = std::get<0>( override->second );
@@ -6423,6 +6449,10 @@ void cata_tiles::draw_entity_with_overlays( const Character &ch, const tripoint_
     // next up, draw all the overlays
     const auto overlays = ch.get_overlay_ids();
     for( const auto &[overlay_id, entry] : overlays ) {
+        // Afterimages copy the body and gear, not status-effect overlays (auras, fire...).
+        if( ghost_override && overlay_id.starts_with( "effect_" ) ) {
+            continue;
+        }
         tint_config overlay_bg_color = std::nullopt;
         tint_config overlay_fg_color = std::nullopt;
 
