@@ -116,6 +116,12 @@ played instead. The file name of the sound effect is relative to the soundpack d
 file name is set to "sfx.wav" and your soundpack is in `data/sound/mypack`, the file must be placed
 at `data/sound/mypack/sfx.wav`.
 
+Content mods can ship their own audio without touching `data/sound`. Put the files next to the mod's
+JSON and reference them relative to that file, e.g. `"files": [ "sound/x.ogg" ]` in
+`data/mods/<mod>/sounds.json`. Relative paths are resolved against the active soundpack first, then
+against the directory of the JSON that declared the sound, and finally against the data directory
+(so the old data-relative form `mods/<mod>/sound/x.ogg` keeps working).
+
 ## Sound effects list
 
 A full list of sound effect id's and variants is given in the following. Each line in the list has

@@ -5,9 +5,9 @@
 #include <algorithm>
 #include <array>
 #include <chrono>
+#include <filesystem>
 #include <map>
 #include <string>
-#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -23,6 +23,7 @@
 #include "path_info.h"
 #include "rng.h"
 #include "sdl_wrappers.h"
+#include "sound_path.h"
 #include "sounds.h"
 #include "units_angle.h"
 
@@ -34,6 +35,9 @@ using id_and_variant = std::pair<std::string, std::string>;
 
 struct sound_effect_resource {
     std::string path;
+    /// Directory of the JSON that declared this sound, so content mods can
+    /// reference audio living next to their own data files.
+    std::string source_dir;
     struct deleter {
         auto operator()( MIX_Audio *a ) const -> void {
             MIX_DestroyAudio( a );
@@ -139,7 +143,7 @@ struct ambient_parameters {
 };
 static ambient_parameters current_ambient;
 
-static std::unordered_map<std::string, int> unique_paths;
+static std::map<std::pair<std::string, std::string>, int> unique_paths;
 static sfx_resources_t sfx_resources;
 static std::vector<id_and_variant> sfx_preload;
 static std::map<std::string, std::chrono::steady_clock::time_point> played_sound_time_map;
@@ -452,12 +456,12 @@ static auto get_sfx_resource( const int resource_id ) -> MIX_Audio *
 {
     sound_effect_resource &resource = sfx_resources.resource[resource_id];
     if( !resource.audio ) {
-        auto path = current_soundpack_path + "/" + resource.path;
-        // Mods ship their own sounds as data-relative paths ("mods/<mod>/sound/x.ogg"),
-        // since they can't know which soundpack directory is active.
-        if( !file_exist( path ) && file_exist( PATH_INFO::datadir() + resource.path ) ) {
-            path = PATH_INFO::datadir() + resource.path;
-        }
+        // Mods ship their own sounds next to their JSON, so try the declaring
+        // file's directory and data-relative paths after the active soundpack.
+        const auto candidates = sfx_path_candidates( resource.path, current_soundpack_path,
+                                  resource.source_dir, PATH_INFO::datadir() );
+        const auto found = std::ranges::find_if( candidates, file_exist );
+        const std::string &path = found != candidates.end() ? *found : candidates.front();
         // SFX are predecoded for low-latency playback.
         resource.audio.reset( MIX_LoadAudio( g_mixer, path.c_str(), true ) );
         if( !resource.audio ) {
@@ -467,17 +471,19 @@ static auto get_sfx_resource( const int resource_id ) -> MIX_Audio *
     return resource.audio.get();
 }
 
-static auto add_sfx_path( const std::string &path ) -> int
+static auto add_sfx_path( const std::string &path, const std::string &source_dir ) -> int
 {
-    const auto find_result = unique_paths.find( path );
+    const auto key = std::pair( path, source_dir );
+    const auto find_result = unique_paths.find( key );
     if( find_result != unique_paths.end() ) {
         return find_result->second;
     }
     const int result = sfx_resources.resource.size();
     sound_effect_resource new_resource;
     new_resource.path = path;
+    new_resource.source_dir = source_dir;
     sfx_resources.resource.push_back( std::move( new_resource ) );
-    unique_paths[path] = result;
+    unique_paths[key] = result;
     return result;
 }
 
@@ -485,9 +491,10 @@ static auto add_sfx_path( const std::string &path ) -> int
 
 auto sfx::load_sound_effects( const JsonObject &jsobj ) -> void
 {
-    if( !sound_init_success ) {
-        return;
-    }
+    const auto source_location = jsobj.get_source_location();
+    const auto source_dir = source_location.path
+                            ? std::filesystem::path( *source_location.path ).parent_path().generic_string()
+                            : std::string();
     const id_and_variant key( jsobj.get_string( "id" ), jsobj.get_string( "variant", "default" ) );
     const int volume = jsobj.get_int( "volume", 100 );
     auto &effects = sfx_resources.sound_effects[key];
@@ -495,16 +502,13 @@ auto sfx::load_sound_effects( const JsonObject &jsobj ) -> void
     for( const std::string file : jsobj.get_array( "files" ) ) {
         sound_effect new_sound_effect;
         new_sound_effect.volume      = volume;
-        new_sound_effect.resource_id = add_sfx_path( file );
+        new_sound_effect.resource_id = add_sfx_path( file, source_dir );
         effects.push_back( new_sound_effect );
     }
 }
 
 auto sfx::load_sound_effect_preload( const JsonObject &jsobj ) -> void
 {
-    if( !sound_init_success ) {
-        return;
-    }
     for( JsonObject aobj : jsobj.get_array( "preload" ) ) {
         const id_and_variant preload_key( aobj.get_string( "id" ),
                                           aobj.get_string( "variant", "default" ) );
@@ -514,9 +518,6 @@ auto sfx::load_sound_effect_preload( const JsonObject &jsobj ) -> void
 
 auto sfx::load_playlist( const JsonObject &jsobj ) -> void
 {
-    if( !sound_init_success ) {
-        return;
-    }
     for( JsonObject playlist : jsobj.get_array( "playlists" ) ) {
         const std::string playlist_id = playlist.get_string( "id" );
         music_playlist playlist_to_load;
@@ -916,7 +917,7 @@ auto load_soundset() -> void
 
     {
         unique_paths.clear();
-        std::unordered_map<std::string, int> t_swap;
+        std::map<std::pair<std::string, std::string>, int> t_swap;
         unique_paths.swap( t_swap );
     }
     {

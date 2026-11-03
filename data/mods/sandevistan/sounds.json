@@ -4,20 +4,20 @@
     "id": "sandevistan",
     "variant": "activate",
     "volume": 100,
-    "files": [ "mods/sandevistan/sound/sandevistan_on.ogg" ]
+    "files": [ "sound/sandevistan_on.ogg" ]
   },
   {
     "type": "sound_effect",
     "id": "sandevistan",
     "variant": "deactivate",
     "volume": 90,
-    "files": [ "mods/sandevistan/sound/sandevistan_off.ogg" ]
+    "files": [ "sound/sandevistan_off.ogg" ]
   },
   {
     "type": "sound_effect",
     "id": "sandevistan",
     "variant": "overheat",
     "volume": 100,
-    "files": [ "mods/sandevistan/sound/sandevistan_overheat.ogg" ]
+    "files": [ "sound/sandevistan_overheat.ogg" ]
   }
 ]
