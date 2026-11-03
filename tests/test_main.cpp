@@ -197,6 +197,12 @@ static void init_global_game_state(
     get_options().init();
     get_options().load();
 
+    // Tests run on the compiled-in bubble size (g_reality_bubble_size), never init_bubble_config();
+    // keep the option equal so g->on_options_changed() in one test can't resize the map for later ones.
+    if (get_options().has_option("REALITY_BUBBLE_SIZE")) {
+        get_options().get_option("REALITY_BUBBLE_SIZE").setValue(std::to_string(g_reality_bubble_size));
+    }
+
     // Apply command-line option overrides for test suite execution.
     if (!option_overrides.empty()) {
         for (const name_value_pair_t& option : option_overrides) {

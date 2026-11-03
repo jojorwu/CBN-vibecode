@@ -1043,6 +1043,10 @@ auto world::get_player_paths() const -> std::vector<std::string>
 
 sqlite3 *world::get_player_db()
 {
+    // Overmap saves call this from pool threads; unsynchronized first use opened rival
+    // connections whose open save transaction left the others failing with "database is locked".
+    static auto player_db_mutex = std::mutex{};
+    const auto lock = std::lock_guard<std::mutex>( player_db_mutex );
     if( !save_db ) {
         save_db = open_db( info->folder_path() + "/" + get_player_path() + ".sqlite3" );
         last_save_id = g->u.get_save_id();

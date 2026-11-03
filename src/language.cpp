@@ -341,6 +341,9 @@ void update_global_locale()
     if( setlocale( LC_ALL, ".1252" ) == nullptr ) {
         dbg( DL::Warn ) << "Error while setlocale(LC_ALL, '.1252').";
     }
+    // ".1252" keeps the OS region's number format (e.g. "4,49"), unlike the chosen game language;
+    // keep the decimal point stable like other platforms do for English.
+    setlocale( LC_NUMERIC, "C" );
 #else // _WIN32
     std::string lang = ::get_option<std::string>( "USE_LANG" );
 

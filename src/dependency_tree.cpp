@@ -267,10 +267,13 @@ void dependency_tree::build_connections(
     const std::map<mod_id, std::vector<mod_id > > &key_conflict_map
 )
 {
-    for( auto &elem : key_dependency_map ) {
-        const auto iter = master_node_map.find( elem.first );
-        if( iter != master_node_map.end() ) {
-            dependency_node *knode = &iter->second;
+    // Walk nodes lexicographically: mod_id's default order is interning order, which varies
+    // between builds and made child order (and dependents lists) non-deterministic.
+    for( auto &[key, node] : master_node_map ) {
+        const auto deps = key_dependency_map.find( key );
+        if( deps != key_dependency_map.end() ) {
+            const auto &elem = *deps;
+            dependency_node *knode = &node;
 
             // apply parents list
             std::vector<mod_id> vnode_parents = elem.second;
