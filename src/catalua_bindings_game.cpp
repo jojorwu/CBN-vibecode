@@ -684,7 +684,12 @@ void cata::detail::reg_game_api( sol::state &lua )
     DOC( "Draws a translucent, tinted copy of the avatar at a map position (tiles mode only).  " );
     DOC( "Takes a table: `pos` (TripointBubMs), `color` (\"#RRGGBB\"), optional `alpha` (0-255, default 160)." );
     luna::set_fx( lib, "add_afterimage", []( const sol::table &opts ) -> void {
-        const auto pos = opts.get<sol::optional<tripoint_bub_ms>>( "pos" );
+        // Read the coordinate through the direct conversion helper: sol's ADL-based
+        // conversion for coord_point silently drops the value on MSVC builds.
+        std::optional<tripoint_bub_ms> pos;
+        if( const sol::object raw_pos = opts["pos"]; raw_pos.get_type() == sol::type::userdata ) {
+            pos = cata::detail::lua_coords::as_cpp<tripoint_bub_ms>( raw_pos );
+        }
         const auto color = RGBColor::try_parse( opts.get_or<std::string>( "color", "" ) );
         if( !pos || !color )
         {
