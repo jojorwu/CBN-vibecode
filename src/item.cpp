@@ -9985,7 +9985,11 @@ iteminfo::iteminfo( const std::string &Type, const std::string &Name, const std:
     three_decimal = ( Flags & is_three_decimal );
     dValue = Value;
     bShowPlus = static_cast<bool>( Flags & show_plus );
+    // Item stats are numeric, not translatable text: format them with the
+    // invariant C locale so the decimal separator is always '.' regardless of
+    // the player's system locale (matches the rest of the game's numbers).
     std::stringstream convert;
+    convert.imbue( std::locale::classic() );
     if( bShowPlus ) {
         convert << std::showpos;
     }
