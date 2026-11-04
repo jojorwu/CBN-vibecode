@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import polib
 import os
+import sys
 import re
 types = ["d", "i", "u", "f", "e", "g", "x", "s", "c", "p"]
 
@@ -122,10 +123,13 @@ def print_message(msg, segments):
 
 
 num_errors = 0
-for file in sorted(os.listdir("lang/po")):
+# Optional PO paths (e.g. a mod's lang/*.po); defaults to the game's lang/po.
+paths = sys.argv[1:] or [f"lang/po/{f}" for f in sorted(os.listdir("lang/po"))]
+for path in paths:
+    file = os.path.basename(path)
     if file.endswith(".po") and not file.endswith("en.po"):
         print("Checking", file, end="", flush=True)
-        errors = check_po_file(f"lang/po/{file}")
+        errors = check_po_file(path)
         n = len(errors)
         num_errors += n
         if n > 0:

@@ -18,6 +18,54 @@ utilities, see [GNU gettext manual](https://www.gnu.org/software/gettext/manual/
 To get some generic tips on translating strings for Cataclysm: Bright Nights and its mods, see
 [translation API](../reference/translation).
 
+## Quick start: one command
+
+If you have a checkout of the game repository, `lang/mod_i18n.py` does the whole workflow below for
+you. It needs Python 3 with `polib` and `luaparser` (`pip install polib luaparser`); GNU gettext and
+Poedit are not required.
+
+```sh
+# First time: extract strings and create empty PO files for the languages you want
+python lang/mod_i18n.py path/to/YourMod --langs ru,de,zh_CN
+
+# Translate path/to/YourMod/lang/*.po in any editor, then rebuild everything
+python lang/mod_i18n.py path/to/YourMod
+```
+
+Each run:
+
+1. **extract** - writes `lang/extracted_strings.pot` from the mod's JSON and Lua files, with source
+   references relative to the mod folder.
+2. **update** - creates missing `lang/<lang>.po` files (with the correct `Plural-Forms` header) and
+   merges new or changed strings into existing ones, keeping existing translations. It prints how
+   much of each language is translated.
+3. **compile** - writes `lang/<lang>.mo` next to each PO file. Untranslated and fuzzy strings are
+   left out, so the game falls back to English for them.
+4. **check** - verifies that printf-style placeholders (`%s`, `%d`, `%1$s`...) match between the
+   original and the translation.
+
+Without `--langs`, the languages are the PO files already in `lang/`. To run one step only, name it:
+`python lang/mod_i18n.py path/to/YourMod compile`.
+
+## Translating Lua strings
+
+Only strings wrapped in a translation call are extracted and translated. Plain string literals in
+Lua are shown in English for every language:
+
+```lua
+-- Not translatable
+gapi.add_msg(MsgType.info, "You disengage the device.")
+
+-- Translatable
+gapi.add_msg(MsgType.info, locale.gettext("You disengage the device."))
+
+-- Formatted: translate the format string, then fill it in
+gapi.add_msg(MsgType.warning, string.format(locale.gettext("Heat at %d%%."), heat))
+```
+
+`lang/mod_i18n.py` warns about `add_msg` calls with a plain string literal. Strings in sidebar
+widgets, menus and popups need the same treatment.
+
 ## A short glossary
 
 ### POT file
