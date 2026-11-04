@@ -491,6 +491,9 @@ static auto add_sfx_path( const std::string &path, const std::string &source_dir
 
 auto sfx::load_sound_effects( const JsonObject &jsobj ) -> void
 {
+    if( !sound_init_success ) {
+        return;
+    }
     const auto source_location = jsobj.get_source_location();
     const auto source_dir = source_location.path
                             ? std::filesystem::path( *source_location.path ).parent_path().generic_string()
@@ -509,6 +512,9 @@ auto sfx::load_sound_effects( const JsonObject &jsobj ) -> void
 
 auto sfx::load_sound_effect_preload( const JsonObject &jsobj ) -> void
 {
+    if( !sound_init_success ) {
+        return;
+    }
     for( JsonObject aobj : jsobj.get_array( "preload" ) ) {
         const id_and_variant preload_key( aobj.get_string( "id" ),
                                           aobj.get_string( "variant", "default" ) );
@@ -518,6 +524,9 @@ auto sfx::load_sound_effect_preload( const JsonObject &jsobj ) -> void
 
 auto sfx::load_playlist( const JsonObject &jsobj ) -> void
 {
+    if( !sound_init_success ) {
+        return;
+    }
     for( JsonObject playlist : jsobj.get_array( "playlists" ) ) {
         const std::string playlist_id = playlist.get_string( "id" );
         music_playlist playlist_to_load;
