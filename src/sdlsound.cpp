@@ -492,6 +492,8 @@ static auto add_sfx_path( const std::string &path, const std::string &source_dir
 auto sfx::load_sound_effects( const JsonObject &jsobj ) -> void
 {
     if( !sound_init_success ) {
+        // Still accept the fields so mod JSON doesn't report them as unvisited.
+        jsobj.allow_omitted_members();
         return;
     }
     const auto source_location = jsobj.get_source_location();
@@ -513,6 +515,8 @@ auto sfx::load_sound_effects( const JsonObject &jsobj ) -> void
 auto sfx::load_sound_effect_preload( const JsonObject &jsobj ) -> void
 {
     if( !sound_init_success ) {
+        // Still accept the fields so mod JSON doesn't report them as unvisited.
+        jsobj.allow_omitted_members();
         return;
     }
     for( JsonObject aobj : jsobj.get_array( "preload" ) ) {
@@ -525,6 +529,8 @@ auto sfx::load_sound_effect_preload( const JsonObject &jsobj ) -> void
 auto sfx::load_playlist( const JsonObject &jsobj ) -> void
 {
     if( !sound_init_success ) {
+        // Still accept the fields so mod JSON doesn't report them as unvisited.
+        jsobj.allow_omitted_members();
         return;
     }
     for( JsonObject playlist : jsobj.get_array( "playlists" ) ) {
