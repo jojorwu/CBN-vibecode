@@ -15,6 +15,7 @@
 
 #include <algorithm>
 #include <iterator>
+#include <optional>
 #include <ranges>
 #include <string>
 #include <utility>
@@ -361,7 +362,14 @@ void cata::detail::reg_overmap( sol::state &lua )
         {
             type_id = type_obj.as<mongroup_id>();
         }
-        const sol::optional<tripoint_abs_omt> pos_val = opts.get<sol::optional<tripoint_abs_omt>>( "pos" );
+        // Read coordinates through the direct conversion helper, as the other Lua
+        // bindings do: sol's own coord_point extraction is unreliable.
+        std::optional<tripoint_abs_omt> pos_val;
+        const sol::object pos_obj = opts.get<sol::object>( "pos" );
+        if( pos_obj.get_type() == sol::type::userdata )
+        {
+            pos_val = cata::detail::lua_coords::as_cpp<tripoint_abs_omt>( pos_obj );
+        }
         if( type_id.is_null() || !pos_val.has_value() )
         {
             return nullptr;
@@ -371,7 +379,12 @@ void cata::detail::reg_overmap( sol::state &lua )
         const bool is_horde = opts.get_or( "horde", true );
         const std::string behaviour = opts.get_or( "behaviour", std::string( "roam" ) );
         const bool diffuse = opts.get_or( "diffuse", false );
-        const sol::optional<tripoint_abs_omt> target_omt = opts.get<sol::optional<tripoint_abs_omt>>( "target" );
+        std::optional<tripoint_abs_omt> target_omt;
+        const sol::object target_obj = opts.get<sol::object>( "target" );
+        if( target_obj.get_type() == sol::type::userdata )
+        {
+            target_omt = cata::detail::lua_coords::as_cpp<tripoint_abs_omt>( target_obj );
+        }
 
         const tripoint_abs_sm pos_abs_sm = project_to<coords::sm>( *pos_val );
         mongroup mg( type_id, pos_abs_sm, radius, population );
