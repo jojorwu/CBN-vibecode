@@ -6,15 +6,22 @@
 #include "catalua_luna.h"
 #include "catalua_luna_doc.h"
 #include "coordinates.h"
+#include "debug.h"
 #include "enums.h"
 #include "fluid_grid.h"
+#include "game_constants.h"
 #include "mongroup.h"
+#include "overmap/om_direction.h"
+#include "overmap/overmap.h"
+#include "overmap/overmap_special.h"
 #include "overmap/overmap_types.h"
 #include "overmap/overmapbuffer.h"
+#include "regional_settings.h"
 #include "type_id.h"
 
 #include <algorithm>
 #include <iterator>
+#include <optional>
 #include <ranges>
 #include <string>
 #include <utility>
@@ -140,6 +147,73 @@ void cata::detail::reg_overmap( sol::state &lua )
         } );
     }
 #undef UT_CLASS
+
+    // Register a single overmap, handed to the on_overmap_generated hook.
+    {
+        DOC( "One overmap (a 180x180 grid of overmap terrain per z-level). Positions are overmap-local." );
+        sol::usertype<overmap> ut = luna::new_usertype<overmap>( lua, luna::no_bases,
+                                    luna::no_constructor );
+
+        DOC( "Absolute position of this overmap." );
+        luna::set_fx( ut, "pos", []( const overmap & om ) -> point_abs_om { return om.pos(); } );
+
+        DOC( "Size of the overmap along x and y, in overmap terrain tiles." );
+        luna::set_fx( ut, "size", []( const overmap & /*om*/ ) -> int { return OMAPX; } );
+
+        DOC( "Whether the overmap-local position lies on this overmap." );
+        luna::set_fx( ut, "inbounds", []( const overmap & /*om*/, const tripoint_om_omt & p ) -> bool { return overmap::inbounds( p ); } );
+
+        DOC( "Id of the region_settings this overmap was generated with." );
+        luna::set_fx( ut, "region", []( const overmap & om ) -> std::string { return om.get_settings().id; } );
+
+        DOC( "Overmap terrain at the overmap-local position." );
+        luna::set_fx( ut, "ter", []( const overmap & om, const tripoint_om_omt & p ) -> oter_id {
+            if( !overmap::inbounds( p ) )
+            {
+                debugmsg( "Overmap:ter: %s is out of bounds", p.to_string() );
+                return oter_id();
+            }
+            return om.ter( p );
+        } );
+
+        DOC( "Set the overmap terrain at the overmap-local position." );
+        luna::set_fx( ut, "ter_set", []( overmap & om, const tripoint_om_omt & p,
+        const oter_str_id & id ) -> void {
+            if( !overmap::inbounds( p ) || !id.is_valid() )
+            {
+                debugmsg( "Overmap:ter_set: invalid position %s or terrain '%s'", p.to_string(), id.str() );
+                return;
+            }
+            om.ter_set( p, id.id() );
+        } );
+
+        DOC( "Whether the overmap special fits at the overmap-local position. " );
+        DOC( "`dir` is 0 north, 1 east, 2 south, 3 west." );
+        luna::set_fx( ut, "can_place_special", []( const overmap & om, const std::string & special,
+        const tripoint_om_omt & p, int dir ) -> bool {
+            const auto id = overmap_special_id( special );
+            if( !id.is_valid() || dir < 0 || dir > 3 )
+            {
+                debugmsg( "Overmap:can_place_special: invalid special '%s' or direction %d", special, dir );
+                return false;
+            }
+            return om.can_place_special( *id, p, static_cast<om_direction::type>( dir ), false );
+        } );
+
+        DOC( "Place the overmap special at the overmap-local position, overwriting what is there, " );
+        DOC( "and connect it to roads as JSON-placed specials are. `dir` is 0 north, 1 east, 2 south, 3 west." );
+        luna::set_fx( ut, "place_special", []( overmap & om, const std::string & special,
+        const tripoint_om_omt & p, int dir ) -> void {
+            const auto id = overmap_special_id( special );
+            if( !id.is_valid() || dir < 0 || dir > 3 || !overmap::inbounds( p ) )
+            {
+                debugmsg( "Overmap:place_special: invalid special '%s', direction %d or position %s", special, dir,
+                          p.to_string() );
+                return;
+            }
+            om.place_special_forced( id, p, static_cast<om_direction::type>( dir ) );
+        } );
+    }
 
     // Register overmapbuffer global library
     DOC( "Global overmap buffer interface for finding and inspecting overmap terrain." );
@@ -361,7 +435,14 @@ void cata::detail::reg_overmap( sol::state &lua )
         {
             type_id = type_obj.as<mongroup_id>();
         }
-        const sol::optional<tripoint_abs_omt> pos_val = opts.get<sol::optional<tripoint_abs_omt>>( "pos" );
+        // Read coordinates through the direct conversion helper, as the other Lua
+        // bindings do: sol's own coord_point extraction is unreliable.
+        std::optional<tripoint_abs_omt> pos_val;
+        const sol::object pos_obj = opts.get<sol::object>( "pos" );
+        if( pos_obj.get_type() == sol::type::userdata )
+        {
+            pos_val = cata::detail::lua_coords::as_cpp<tripoint_abs_omt>( pos_obj );
+        }
         if( type_id.is_null() || !pos_val.has_value() )
         {
             return nullptr;
@@ -371,7 +452,12 @@ void cata::detail::reg_overmap( sol::state &lua )
         const bool is_horde = opts.get_or( "horde", true );
         const std::string behaviour = opts.get_or( "behaviour", std::string( "roam" ) );
         const bool diffuse = opts.get_or( "diffuse", false );
-        const sol::optional<tripoint_abs_omt> target_omt = opts.get<sol::optional<tripoint_abs_omt>>( "target" );
+        std::optional<tripoint_abs_omt> target_omt;
+        const sol::object target_obj = opts.get<sol::object>( "target" );
+        if( target_obj.get_type() == sol::type::userdata )
+        {
+            target_omt = cata::detail::lua_coords::as_cpp<tripoint_abs_omt>( target_obj );
+        }
 
         const tripoint_abs_sm pos_abs_sm = project_to<coords::sm>( *pos_val );
         mongroup mg( type_id, pos_abs_sm, radius, population );

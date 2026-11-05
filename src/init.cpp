@@ -57,7 +57,6 @@
 #include "map/mapdata.h"
 #include "mapgen/map_extras.h"
 #include "mapgen/mapgen.h"
-#include "mapgen/mapgen_async.h"
 #include "mapgen/mapgen_color_palette.h"
 #include "martialarts.h"
 #include "material.h"
@@ -988,10 +987,6 @@ static void load_and_finalize_packs( loading_ui &ui, const std::string &msg,
 
     init::load_main_lua_scripts( *loader.lua, packs );
     cata::clear_mod_being_loaded( *loader.lua );
-    // Update cached hook-presence flag so worker threads know whether to queue
-    // deferred mapgen postprocess hooks (avoids lock + allocation overhead per omt
-    // when no on_mapgen_postprocess hooks are registered).
-    refresh_mapgen_postprocess_hook_presence( *loader.lua );
 }
 
 auto init::load_main_lua_scripts( cata::lua_state &state, const std::vector<mod_id> &packs ) -> int

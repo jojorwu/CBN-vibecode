@@ -233,8 +233,8 @@ local function overheat(who, tier)
   -- If the engine refuses, retry next turn instead of stacking penalties.
   if not force_off(who, tier, "overheat") then return end
   play_sound("overheat")
-  gapi.add_msg(MsgType.bad, "<color_light_red>SANDEVISTAN OVERHEAT.</color>  The world slams back to full speed.")
-  gapi.add_msg(MsgType.bad, "Blood runs from your nose and the floor tilts under you.")
+  gapi.add_msg(MsgType.bad, locale.gettext("<color_light_red>SANDEVISTAN OVERHEAT.</color>  The world slams back to full speed."))
+  gapi.add_msg(MsgType.bad, locale.gettext("Blood runs from your nose and the floor tilts under you."))
   who:add_effect(EFF_BLEED, TimeDuration.from_minutes(3), BP_HEAD, 1)
   who:add_effect(EFF_STUNNED, TimeDuration.from_turns(gapi.rng(2, 5)))
   who:add_effect(EFF_COOLDOWN, TimeDuration.from_turns(OVERHEAT_COOLDOWN_TURNS))
@@ -247,7 +247,7 @@ end
 local function out_of_power(who, tier)
   if not force_off(who, tier, "power") then return end
   play_sound("deactivate")
-  gapi.add_msg(MsgType.bad, "Your Sandevistan runs out of power and the world snaps back to speed.")
+  gapi.add_msg(MsgType.bad, locale.gettext("Your Sandevistan runs out of power and the world snaps back to speed."))
 end
 
 --- Charge the per-action energy cost; shuts the unit down if the avatar can't pay.
@@ -274,7 +274,7 @@ mod.on_activate = function(params)
   local heat = get_heat(who)
   if who:has_effect(EFF_COOLDOWN) or heat >= HEAT_REFUSE then
     if who:is_avatar() then
-      gapi.add_msg(MsgType.warning, string.format("The Sandevistan refuses to engage: spine at %d%%.", math.floor(heat)))
+      gapi.add_msg(MsgType.warning, string.format(locale.gettext("The Sandevistan refuses to engage: spine at %d%%."), math.floor(heat)))
     end
     force_off(who, tier, "refused")
     -- The engine charged act_cost before calling us (bionics.cpp: power is spent, then
@@ -293,7 +293,7 @@ mod.on_activate = function(params)
   clear_trail()
   drop_afterimage(who:get_pos_ms(), tier.trail_len)
   play_sound("activate")
-  gapi.add_msg(MsgType.good, "<color_light_green>Sandevistan engaged.</color>  Everything around you slows to a crawl.")
+  gapi.add_msg(MsgType.good, locale.gettext("<color_light_green>Sandevistan engaged.</color>  Everything around you slows to a crawl."))
 end
 
 ---@param params { user: Character, bionic: any }
@@ -304,7 +304,7 @@ mod.on_deactivate = function(params)
   clear_trail()
   if mod.shutdown_reason == nil then -- a manual switch-off
     play_sound("deactivate")
-    gapi.add_msg(MsgType.info, "You disengage the Sandevistan.  The world lurches back up to speed.")
+    gapi.add_msg(MsgType.info, locale.gettext("You disengage the Sandevistan.  The world lurches back up to speed."))
   end
 end
 
@@ -412,11 +412,11 @@ local function draw_widget(width, _height)
   local heat = get_heat(who)
   local state, state_color
   if mod.active then
-    state, state_color = "ENGAGED", "light_green"
+    state, state_color = locale.gettext("ENGAGED"), "light_green"
   elseif who:has_effect(EFF_COOLDOWN) then
-    state, state_color = "COOLING", "light_red"
+    state, state_color = locale.gettext("COOLING"), "light_red"
   else
-    state, state_color = "ready", "light_gray"
+    state, state_color = locale.gettext("ready"), "light_gray"
   end
   local heat_color = ({ [0] = "light_gray", "yellow", "light_red", "red" })[heat_level(heat)]
   local power = power_j(who)
@@ -426,10 +426,10 @@ local function draw_widget(width, _height)
   local bar_w = math.max(5, math.min(16, width - 18))
 
   return {
-    { text = string.format("Sandevistan %s: %s", tier.label, state), color = state_color },
-    { text = string.format("Heat  [%s] %3d%%", bar(heat / HEAT_MAX, bar_w), math.floor(heat)), color = heat_color },
+    { text = string.format(locale.gettext("Sandevistan %s: %s"), tier.label, state), color = state_color },
+    { text = string.format(locale.gettext("Heat  [%s] %3d%%"), bar(heat / HEAT_MAX, bar_w), math.floor(heat)), color = heat_color },
     {
-      text = string.format("Power [%s] %4d kJ", bar(power / max_power, bar_w), math.floor(power / 1000)),
+      text = string.format(locale.gettext("Power [%s] %4d kJ"), bar(power / max_power, bar_w), math.floor(power / 1000)),
       color = power_color,
     },
   }

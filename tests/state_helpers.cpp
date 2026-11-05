@@ -4,6 +4,7 @@
 #include "action_time_scale.h"
 #include "calendar.h"
 #include "cata_arena.h"
+#include "game.h"
 #include "map_helpers.h"
 #include "name.h"
 #include "player_helpers.h"
@@ -55,6 +56,8 @@ auto clear_states(const enum_bitset<test_state>& states) -> void {
         set_time(calendar::turn_zero);
         // do_turn() leaves the next tick's length behind (e.g. after a raised TIME_ACTION_SCALE).
         action_time_scale::set_calendar_turns_this_tick(1);
+        // A previous test may have cached a fixed-window check far in the future.
+        g->reset_activity_fixed_window_state();
     }
     if (normalized_states.test(state::name)) { Name::clear(); }
     if (normalized_states.test(state::arena)) { cleanup_arenas(); }

@@ -41,6 +41,7 @@
 #include "overmap_connection.h"
 #include "overmap_label.h"
 #include "overmap_location.h"
+#include "overmap_lua_hooks.h"
 #include "overmap_noise.h"
 #include "overmap_special.h" // IWYU pragma: associated
 #include "overmap_types.h"
@@ -6543,6 +6544,7 @@ auto overmap::open(const dimension_id& dim_id, overmap_special_batch& enabled_sp
 
         // pointers looks like (north, south, west, east)
         generate(pointers[0], pointers[3], pointers[1], pointers[2], enabled_specials);
+        overmap_lua_hooks::mark_generated(dim_id, loc);
     }
 }
 

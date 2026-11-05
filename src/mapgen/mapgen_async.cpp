@@ -1,5 +1,6 @@
 #include "mapgen_async.h"
 
+#include "../overmap/overmap_lua_hooks.h"
 #include "../overmap/overmapbuffer.h"
 #include "auto_note.h"
 #include "catalua.h"
@@ -32,27 +33,13 @@ std::vector<deferred_mapgen_hook> g_hooks;
 std::mutex g_autonote_mutex;
 std::vector<deferred_autonote> g_autonotes;
 
-// Cached flag: are any on_mapgen_postprocess hooks registered?
-// Written on the main thread after mod load; read from worker threads.
-// Plain std::atomic<bool> — no Android-specific fallback needed
-// (the atomic_ref<float> workaround in shadowcasting.cpp does not apply here).
-std::atomic<bool> g_has_mapgen_hooks{false};
-
 } // namespace
 
 void push_deferred_mapgen_hook(deferred_mapgen_hook h) {
-    // Fast path: skip the lock and the queue entirely when no hooks exist.
-    if (!g_has_mapgen_hooks.load(std::memory_order_relaxed)) { return; }
+    // Hooks can be registered at runtime (scripts, tests), so do not gate this on
+    // a cached "hooks exist" flag: a stale false would silently drop the hook.
     std::lock_guard<std::mutex> lk(g_hook_mutex);
     g_hooks.push_back(std::move(h));
-}
-
-void refresh_mapgen_postprocess_hook_presence(cata::lua_state& state) {
-    g_has_mapgen_hooks.store(cata::has_mapgen_postprocess_hooks(state), std::memory_order_relaxed);
-}
-
-auto mapgen_hooks_registered() -> bool {
-    return g_has_mapgen_hooks.load(std::memory_order_relaxed);
 }
 
 void push_deferred_autonote(deferred_autonote entry) {
@@ -93,6 +80,8 @@ void run_deferred_autonotes() {
 }
 
 void run_deferred_mapgen_hooks() {
+    // Overmaps generated on workers during mapgen get their Lua hook here, on the main thread.
+    overmap_lua_hooks::run_pending();
     // Drain under the lock, then process without holding it.
     std::vector<deferred_mapgen_hook> pending;
     {

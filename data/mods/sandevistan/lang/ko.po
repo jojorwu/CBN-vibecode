@@ -1,0 +1,198 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: sandevistan\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: bionics.json
+msgid "Sandevistan Mk.1"
+msgstr "산데비스탄 Mk.1"
+
+#. ~ Description for {'str': 'Sandevistan Mk.1'}
+#: bionics.json
+msgid ""
+"A civilian-grade speedware unit grafted along your spine.  When engaged it "
+"floods your nervous system with synthetic signal boosters: your speed rises "
+"sharply, the world around you slows, and your vision turns a flat green.  "
+"Running it builds heat in the spinal housing and drains bionic power with "
+"every move.  Let it overheat and it shuts itself down, taking a piece of you"
+" with it."
+msgstr ""
+"척추를 따라 이식된 민간용 스피드웨어 장치입니다.  작동시키면 합성 신호 증폭제가 신경계에 흘러넘쳐 속도가 급격히 오르고, 주변 세계가 "
+"느려지며, 시야가 평평한 초록색으로 물듭니다.  작동하는 동안 척추 하우징에 열이 쌓이고 움직일 때마다 바이오닉 전력을 소모합니다.  "
+"과열되면 스스로 꺼지면서 당신의 일부를 함께 앗아갑니다."
+
+#: bionics.json
+msgid "Military Sandevistan"
+msgstr "군용 산데비스탄"
+
+#. ~ Description for {'str': 'Military Sandevistan'}
+#: bionics.json
+msgid ""
+"A military prototype speedware spine, far beyond anything sold on the "
+"street.  When engaged, everything around you all but stops: bullets hang in "
+"the air, monsters freeze mid-step, and you move through it trailing "
+"afterimages in every color of the spectrum.  It runs hot, very hot, and it "
+"drinks bionic power with every move you make.  Overheat it and the shutdown "
+"is brutal."
+msgstr ""
+"길거리에서 파는 어떤 물건과도 비교할 수 없는 군용 시제품 스피드웨어 척추입니다.  작동시키면 주변의 모든 것이 거의 멈춥니다: 총알은 "
+"공중에 떠 있고, 몬스터는 걸음 도중에 얼어붙으며, 당신은 그 사이를 스펙트럼의 모든 색으로 된 잔상을 남기며 움직입니다.  열이 나고,"
+" 아주 뜨거워지며, 당신이 움직일 때마다 바이오닉 전력을 들이켭니다.  과열시키면 정지는 가혹할 것입니다."
+
+#: effects.json
+msgid "Sandevistan engaged"
+msgstr "산데비스탄 작동 중"
+
+#. ~ Description of effect 'Sandevistan engaged'.
+#: effects.json
+msgid "The world crawls by in a flat green haze.  Everything is so slow."
+msgstr "세계가 평평한 초록 안개 속에서 기어가듯 흘러갑니다.  모든 것이 너무 느립니다."
+
+#: effects.json
+msgid "Spine warm"
+msgstr "척추 미열"
+
+#. ~ Description of effect 'Spine warm'.
+#: effects.json
+msgid "Your Sandevistan housing is warming up."
+msgstr "산데비스탄 하우징이 데워지고 있습니다."
+
+#: effects.json
+msgid "Spine hot"
+msgstr "척추 고열"
+
+#. ~ Description of effect 'Spine hot'.
+#: effects.json
+msgid "Your spine burns.  The Sandevistan is close to its limit."
+msgstr "척추가 타는 듯합니다.  산데비스탄이 한계에 가까워졌습니다."
+
+#: effects.json
+msgid "Spine CRITICAL"
+msgstr "척추 위험"
+
+#. ~ Description of effect 'Spine CRITICAL'.
+#: effects.json
+msgid "Your vision swims and your teeth ache.  Shut it down NOW."
+msgstr "시야가 흔들리고 이가 욱신거립니다.  당장 꺼야 합니다."
+
+#: effects.json
+msgid "Sandevistan cooling down"
+msgstr "산데비스탄 냉각 중"
+
+#. ~ Description of effect 'Sandevistan cooling down'.
+#: effects.json
+msgid ""
+"The heat sinks along your spine tick as they cool.  The Sandevistan will not"
+" engage until they do."
+msgstr "척추를 따라 늘어선 방열판이 식으면서 딸깍거립니다.  다 식을 때까지 산데비스탄은 작동하지 않습니다."
+
+#: fields.json
+msgid "afterimage"
+msgstr "잔상"
+
+#: items.json
+msgid "Sandevistan Mk.1 CBM"
+msgid_plural "Sandevistan Mk.1 CBMs"
+msgstr[0] "CBM: 산데비스탄 Mk.1"
+
+#. ~ Description for {'str': 'Sandevistan Mk.1 CBM'}
+#: items.json
+msgid ""
+"A civilian-grade spinal speedware unit, still sealed in sterile wrap.  The "
+"installation manual covers three pages of warnings about heat and neural "
+"strain."
+msgstr ""
+"아직 멸균 포장에 밀봉된 민간용 척추 스피드웨어 장치입니다.  설치 설명서 세 페이지가 열과 신경 부담에 대한 경고로 채워져 있습니다."
+
+#: items.json
+msgid "Military Sandevistan CBM"
+msgid_plural "Military Sandevistan CBMs"
+msgstr[0] "CBM: 군용 산데비스탄"
+
+#. ~ Description for {'str': 'Military Sandevistan CBM'}
+#: items.json
+msgid ""
+"A matte-black military speedware spine stamped with serial numbers that have"
+" been ground off.  The heat sinks along its length are scorched.  Whoever "
+"wore it before you probably did not stop in time."
+msgstr ""
+"일련번호가 갈려 나간 무광 검정 군용 스피드웨어 척추입니다.  길이를 따라 늘어선 방열판은 그을려 있습니다.  이전에 이것을 착용한 "
+"사람은 아마 제때 멈추지 못했을 것입니다."
+
+#: main.lua
+msgid ""
+"<color_light_red>SANDEVISTAN OVERHEAT.</color>  The world slams back to full"
+" speed."
+msgstr "<color_light_red>산데비스탄 과열.</color>  세계가 단숨에 원래 속도로 되돌아옵니다."
+
+#: main.lua
+msgid "Blood runs from your nose and the floor tilts under you."
+msgstr "코에서 피가 흐르고 발밑의 바닥이 기울어집니다."
+
+#: main.lua
+msgid "Your Sandevistan runs out of power and the world snaps back to speed."
+msgstr "산데비스탄의 전력이 바닥나 세계가 원래 속도로 튕겨 돌아옵니다."
+
+#: main.lua
+#, c-format
+msgid "The Sandevistan refuses to engage: spine at %d%%."
+msgstr "산데비스탄이 작동을 거부합니다: 척추 %d%%."
+
+#: main.lua
+msgid ""
+"<color_light_green>Sandevistan engaged.</color>  Everything around you slows"
+" to a crawl."
+msgstr "<color_light_green>산데비스탄 작동.</color>  주변의 모든 것이 기어가듯 느려집니다."
+
+#: main.lua
+msgid "You disengage the Sandevistan.  The world lurches back up to speed."
+msgstr "산데비스탄을 끕니다.  세계가 휘청이며 원래 속도로 돌아옵니다."
+
+#: main.lua
+msgid "ready"
+msgstr "대기"
+
+#: main.lua
+msgid "COOLING"
+msgstr "냉각 중"
+
+#: main.lua
+msgid "ENGAGED"
+msgstr "작동 중"
+
+#: main.lua
+#, c-format
+msgid "Sandevistan %s: %s"
+msgstr "산데비스탄 %s: %s"
+
+#: main.lua
+#, c-format
+msgid "Heat  [%s] %3d%%"
+msgstr "열   [%s] %3d%%"
+
+#: main.lua
+#, c-format
+msgid "Power [%s] %4d kJ"
+msgstr "전력 [%s] %4d kJ"
+
+#: modinfo.json
+msgid "Sandevistan"
+msgstr "산데비스탄"
+
+#. ~ Description for Sandevistan
+#: modinfo.json
+msgid ""
+"Adds the Sandevistan: a spinal speedware CBM that slows the world to a "
+"crawl.  While it runs your vision turns green, monsters nearly freeze and "
+"you leave a trail of rainbow afterimages.  Every move drains bionic power, "
+"and pushing it too hard overheats the unit: nosebleed, stun and a forced "
+"cooldown.  Both units can be picked at character creation."
+msgstr ""
+"산데비스탄을 추가합니다: 세계를 기어가듯 느리게 만드는 척추 스피드웨어 CBM입니다.  작동하는 동안 시야가 초록색으로 바뀌고, 몬스터는"
+" 거의 멈추며, 당신은 무지갯빛 잔상을 남깁니다.  움직일 때마다 바이오닉 전력을 소모하며, 무리하면 장치가 과열됩니다: 코피, 기절, "
+"강제 냉각.  두 장치 모두 캐릭터 생성 시 선택할 수 있습니다."

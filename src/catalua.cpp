@@ -44,7 +44,6 @@ constexpr int LUA_API_VERSION = 2;
 #include "lua_action_menu.h"
 #include "lua_sidebar_widgets.h"
 #include "map/map.h"
-#include "mapgen/mapgen_async.h"
 #include "mapgen/mapgen_constructor.h"
 #include "messages.h"
 #include "mod_manager.h"
@@ -152,9 +151,6 @@ void reload_lua_code()
         debugmsg( "%s", e.what() );
     }
     clear_mod_being_loaded( state );
-    // Refresh the cached flag so worker threads immediately see any change to
-    // on_mapgen_postprocess hook registration caused by the reload.
-    refresh_mapgen_postprocess_hook_presence( state );
 }
 
 void debug_write_lua_backtrace( std::ostream &out )
@@ -1323,7 +1319,11 @@ void run_on_mapgen_postprocess_hooks_batch( lua_state &state, mapgen_constructor
     params["map"] = &constructor;
 
     std::ranges::for_each( items, [&]( const mapgen_hook_batch_item & item ) {
-        constructor.bind_omt_for_hook( item.omt_pos );
+        // The omt may have been unloaded after the hook was queued; binding would
+        // leave the constructor pointing at missing submaps.
+        if( !constructor.bind_omt_for_hook( item.omt_pos ) ) {
+            return;
+        }
         params["prev"] = sol::lua_nil;
         params["omt"]  = cata::detail::lua_coords::to_lua( item.omt_pos );
         params["when"] = item.when;
@@ -1356,13 +1356,6 @@ void run_on_mapgen_postprocess_hooks_batch( lua_state &state, mapgen_constructor
             }
         } );
     } );
-}
-
-bool has_mapgen_postprocess_hooks( lua_state &state )
-{
-    const auto maybe_hooks = state.lua.globals()["game"]["hooks"]["on_mapgen_postprocess"]
-                             .get<sol::optional<sol::table>>();
-    return maybe_hooks.has_value() && !maybe_hooks->empty();
 }
 
 } // namespace cata

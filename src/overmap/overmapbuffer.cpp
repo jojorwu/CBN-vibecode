@@ -26,6 +26,7 @@
 #include "numeric_interval.h"
 #include "overmap.h"
 #include "overmap_connection.h"
+#include "overmap_lua_hooks.h"
 #include "overmap_special.h"
 #include "overmap_types.h"
 #include "overmapbuffer_registry.h"
@@ -101,6 +102,7 @@ auto overmapbuffer::get(const point_abs_om& p) -> overmap& {
     fix_mongroups(*new_om);
     fix_nemesis(*new_om);
     fix_npcs(*new_om);
+    overmap_lua_hooks::run_pending();
 
     return *new_om;
 }
@@ -113,6 +115,7 @@ void overmapbuffer::create_custom_overmap(const point_abs_om& p, overmap_special
         new_om = overmaps[p].get();
     }
     new_om->populate(dimension_id_, specials);
+    overmap_lua_hooks::run_pending();
 }
 
 void overmapbuffer::generate(const std::vector<point_abs_om>& locs) {
@@ -181,6 +184,7 @@ void overmapbuffer::generate(const std::vector<point_abs_om>& locs) {
             futures.end());
         popup->refresh();
     }
+    overmap_lua_hooks::run_pending();
 }
 
 void overmapbuffer::fix_mongroups(overmap& new_overmap) {

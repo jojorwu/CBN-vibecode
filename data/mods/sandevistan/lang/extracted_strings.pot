@@ -1,0 +1,188 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: sandevistan\n"
+"POT-Creation-Date: 2026-11-04 13:49+0200\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: bionics.json
+msgid "Sandevistan Mk.1"
+msgstr ""
+
+#. ~ Description for {'str': 'Sandevistan Mk.1'}
+#: bionics.json
+msgid ""
+"A civilian-grade speedware unit grafted along your spine.  When engaged it "
+"floods your nervous system with synthetic signal boosters: your speed rises "
+"sharply, the world around you slows, and your vision turns a flat green.  "
+"Running it builds heat in the spinal housing and drains bionic power with "
+"every move.  Let it overheat and it shuts itself down, taking a piece of you"
+" with it."
+msgstr ""
+
+#: bionics.json
+msgid "Military Sandevistan"
+msgstr ""
+
+#. ~ Description for {'str': 'Military Sandevistan'}
+#: bionics.json
+msgid ""
+"A military prototype speedware spine, far beyond anything sold on the "
+"street.  When engaged, everything around you all but stops: bullets hang in "
+"the air, monsters freeze mid-step, and you move through it trailing "
+"afterimages in every color of the spectrum.  It runs hot, very hot, and it "
+"drinks bionic power with every move you make.  Overheat it and the shutdown "
+"is brutal."
+msgstr ""
+
+#: effects.json
+msgid "Sandevistan engaged"
+msgstr ""
+
+#. ~ Description of effect 'Sandevistan engaged'.
+#: effects.json
+msgid "The world crawls by in a flat green haze.  Everything is so slow."
+msgstr ""
+
+#: effects.json
+msgid "Spine warm"
+msgstr ""
+
+#. ~ Description of effect 'Spine warm'.
+#: effects.json
+msgid "Your Sandevistan housing is warming up."
+msgstr ""
+
+#: effects.json
+msgid "Spine hot"
+msgstr ""
+
+#. ~ Description of effect 'Spine hot'.
+#: effects.json
+msgid "Your spine burns.  The Sandevistan is close to its limit."
+msgstr ""
+
+#: effects.json
+msgid "Spine CRITICAL"
+msgstr ""
+
+#. ~ Description of effect 'Spine CRITICAL'.
+#: effects.json
+msgid "Your vision swims and your teeth ache.  Shut it down NOW."
+msgstr ""
+
+#: effects.json
+msgid "Sandevistan cooling down"
+msgstr ""
+
+#. ~ Description of effect 'Sandevistan cooling down'.
+#: effects.json
+msgid ""
+"The heat sinks along your spine tick as they cool.  The Sandevistan will not"
+" engage until they do."
+msgstr ""
+
+#: fields.json
+msgid "afterimage"
+msgstr ""
+
+#: items.json
+msgid "Sandevistan Mk.1 CBM"
+msgid_plural "Sandevistan Mk.1 CBMs"
+msgstr[0] ""
+msgstr[1] ""
+
+#. ~ Description for {'str': 'Sandevistan Mk.1 CBM'}
+#: items.json
+msgid ""
+"A civilian-grade spinal speedware unit, still sealed in sterile wrap.  The "
+"installation manual covers three pages of warnings about heat and neural "
+"strain."
+msgstr ""
+
+#: items.json
+msgid "Military Sandevistan CBM"
+msgid_plural "Military Sandevistan CBMs"
+msgstr[0] ""
+msgstr[1] ""
+
+#. ~ Description for {'str': 'Military Sandevistan CBM'}
+#: items.json
+msgid ""
+"A matte-black military speedware spine stamped with serial numbers that have"
+" been ground off.  The heat sinks along its length are scorched.  Whoever "
+"wore it before you probably did not stop in time."
+msgstr ""
+
+#: main.lua
+msgid ""
+"<color_light_red>SANDEVISTAN OVERHEAT.</color>  The world slams back to full"
+" speed."
+msgstr ""
+
+#: main.lua
+msgid "Blood runs from your nose and the floor tilts under you."
+msgstr ""
+
+#: main.lua
+msgid "Your Sandevistan runs out of power and the world snaps back to speed."
+msgstr ""
+
+#: main.lua
+#, c-format
+msgid "The Sandevistan refuses to engage: spine at %d%%."
+msgstr ""
+
+#: main.lua
+msgid ""
+"<color_light_green>Sandevistan engaged.</color>  Everything around you slows"
+" to a crawl."
+msgstr ""
+
+#: main.lua
+msgid "You disengage the Sandevistan.  The world lurches back up to speed."
+msgstr ""
+
+#: main.lua
+msgid "ready"
+msgstr ""
+
+#: main.lua
+msgid "COOLING"
+msgstr ""
+
+#: main.lua
+msgid "ENGAGED"
+msgstr ""
+
+#: main.lua
+#, c-format
+msgid "Sandevistan %s: %s"
+msgstr ""
+
+#: main.lua
+#, c-format
+msgid "Heat  [%s] %3d%%"
+msgstr ""
+
+#: main.lua
+#, c-format
+msgid "Power [%s] %4d kJ"
+msgstr ""
+
+#: modinfo.json
+msgid "Sandevistan"
+msgstr ""
+
+#. ~ Description for Sandevistan
+#: modinfo.json
+msgid ""
+"Adds the Sandevistan: a spinal speedware CBM that slows the world to a "
+"crawl.  While it runs your vision turns green, monsters nearly freeze and "
+"you leave a trail of rainbow afterimages.  Every move drains bionic power, "
+"and pushing it too hard overheats the unit: nosebleed, stun and a forced "
+"cooldown.  Both units can be picked at character creation."
+msgstr ""

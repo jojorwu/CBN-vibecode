@@ -1,0 +1,226 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: sandevistan\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: bionics.json
+msgid "Sandevistan Mk.1"
+msgstr "Sandevistan Mk.1"
+
+#. ~ Description for {'str': 'Sandevistan Mk.1'}
+#: bionics.json
+msgid ""
+"A civilian-grade speedware unit grafted along your spine.  When engaged it "
+"floods your nervous system with synthetic signal boosters: your speed rises "
+"sharply, the world around you slows, and your vision turns a flat green.  "
+"Running it builds heat in the spinal housing and drains bionic power with "
+"every move.  Let it overheat and it shuts itself down, taking a piece of you"
+" with it."
+msgstr ""
+"Une unité de speedware civile greffée le long de votre colonne vertébrale.  "
+"Une fois activée, elle inonde votre système nerveux d'amplificateurs de "
+"signal synthétiques : votre vitesse augmente brusquement, le monde autour de"
+" vous ralentit et votre vision vire au vert terne.  Son fonctionnement "
+"chauffe le boîtier spinal et consomme de l'énergie bionique à chaque "
+"mouvement.  Laissez-la surchauffer et elle s'éteint d'elle-même, en "
+"emportant un morceau de vous."
+
+#: bionics.json
+msgid "Military Sandevistan"
+msgstr "Sandevistan militaire"
+
+#. ~ Description for {'str': 'Military Sandevistan'}
+#: bionics.json
+msgid ""
+"A military prototype speedware spine, far beyond anything sold on the "
+"street.  When engaged, everything around you all but stops: bullets hang in "
+"the air, monsters freeze mid-step, and you move through it trailing "
+"afterimages in every color of the spectrum.  It runs hot, very hot, and it "
+"drinks bionic power with every move you make.  Overheat it and the shutdown "
+"is brutal."
+msgstr ""
+"Un prototype militaire de colonne speedware, bien au-delà de tout ce qui se "
+"vend dans la rue.  Une fois activé, tout autour de vous s'arrête presque : "
+"les balles restent suspendues dans l'air, les monstres se figent en plein "
+"pas, et vous vous déplacez au milieu de tout cela en laissant des images "
+"rémanentes de toutes les couleurs du spectre.  Il chauffe, énormément, et "
+"boit de l'énergie bionique à chacun de vos mouvements.  Faites-le "
+"surchauffer et l'arrêt sera brutal."
+
+#: effects.json
+msgid "Sandevistan engaged"
+msgstr "Sandevistan activé"
+
+#. ~ Description of effect 'Sandevistan engaged'.
+#: effects.json
+msgid "The world crawls by in a flat green haze.  Everything is so slow."
+msgstr "Le monde se traîne dans une brume verte et terne.  Tout est si lent."
+
+#: effects.json
+msgid "Spine warm"
+msgstr "Colonne tiède"
+
+#. ~ Description of effect 'Spine warm'.
+#: effects.json
+msgid "Your Sandevistan housing is warming up."
+msgstr "Le boîtier de votre Sandevistan se réchauffe."
+
+#: effects.json
+msgid "Spine hot"
+msgstr "Colonne chaude"
+
+#. ~ Description of effect 'Spine hot'.
+#: effects.json
+msgid "Your spine burns.  The Sandevistan is close to its limit."
+msgstr ""
+"Votre colonne vertébrale brûle.  Le Sandevistan approche de sa limite."
+
+#: effects.json
+msgid "Spine CRITICAL"
+msgstr "Colonne CRITIQUE"
+
+#. ~ Description of effect 'Spine CRITICAL'.
+#: effects.json
+msgid "Your vision swims and your teeth ache.  Shut it down NOW."
+msgstr ""
+"Votre vision se trouble et vos dents vous font mal.  Éteignez-le MAINTENANT."
+
+#: effects.json
+msgid "Sandevistan cooling down"
+msgstr "Sandevistan en refroidissement"
+
+#. ~ Description of effect 'Sandevistan cooling down'.
+#: effects.json
+msgid ""
+"The heat sinks along your spine tick as they cool.  The Sandevistan will not"
+" engage until they do."
+msgstr ""
+"Les dissipateurs le long de votre colonne cliquettent en refroidissant.  Le "
+"Sandevistan ne s'activera pas avant qu'ils aient refroidi."
+
+#: fields.json
+msgid "afterimage"
+msgstr "image rémanente"
+
+#: items.json
+msgid "Sandevistan Mk.1 CBM"
+msgid_plural "Sandevistan Mk.1 CBMs"
+msgstr[0] "MBC Sandevistan Mk.1"
+msgstr[1] "MBC Sandevistan Mk.1"
+
+#. ~ Description for {'str': 'Sandevistan Mk.1 CBM'}
+#: items.json
+msgid ""
+"A civilian-grade spinal speedware unit, still sealed in sterile wrap.  The "
+"installation manual covers three pages of warnings about heat and neural "
+"strain."
+msgstr ""
+"Une unité de speedware spinale civile, encore scellée dans son emballage "
+"stérile.  Le manuel d'installation contient trois pages d'avertissements sur"
+" la chaleur et la tension neurale."
+
+#: items.json
+msgid "Military Sandevistan CBM"
+msgid_plural "Military Sandevistan CBMs"
+msgstr[0] "MBC Sandevistan militaire"
+msgstr[1] "MBC Sandevistan militaire"
+
+#. ~ Description for {'str': 'Military Sandevistan CBM'}
+#: items.json
+msgid ""
+"A matte-black military speedware spine stamped with serial numbers that have"
+" been ground off.  The heat sinks along its length are scorched.  Whoever "
+"wore it before you probably did not stop in time."
+msgstr ""
+"Une colonne speedware militaire noir mat dont les numéros de série ont été "
+"limés.  Les dissipateurs sur toute sa longueur sont roussis.  Celui qui la "
+"portait avant vous ne s'est probablement pas arrêté à temps."
+
+#: main.lua
+msgid ""
+"<color_light_red>SANDEVISTAN OVERHEAT.</color>  The world slams back to full"
+" speed."
+msgstr ""
+"<color_light_red>SURCHAUFFE DU SANDEVISTAN.</color>  Le monde reprend "
+"brutalement sa pleine vitesse."
+
+#: main.lua
+msgid "Blood runs from your nose and the floor tilts under you."
+msgstr "Du sang coule de votre nez et le sol se dérobe sous vous."
+
+#: main.lua
+msgid "Your Sandevistan runs out of power and the world snaps back to speed."
+msgstr ""
+"Votre Sandevistan tombe à court d'énergie et le monde reprend brusquement sa"
+" vitesse."
+
+#: main.lua
+#, c-format
+msgid "The Sandevistan refuses to engage: spine at %d%%."
+msgstr "Le Sandevistan refuse de s'activer : colonne à %d%%."
+
+#: main.lua
+msgid ""
+"<color_light_green>Sandevistan engaged.</color>  Everything around you slows"
+" to a crawl."
+msgstr ""
+"<color_light_green>Sandevistan activé.</color>  Tout autour de vous ralentit"
+" jusqu'à se traîner."
+
+#: main.lua
+msgid "You disengage the Sandevistan.  The world lurches back up to speed."
+msgstr ""
+"Vous désactivez le Sandevistan.  Le monde reprend sa vitesse d'un coup."
+
+#: main.lua
+msgid "ready"
+msgstr "prêt"
+
+#: main.lua
+msgid "COOLING"
+msgstr "REFROIDIT"
+
+#: main.lua
+msgid "ENGAGED"
+msgstr "ACTIVÉ"
+
+#: main.lua
+#, c-format
+msgid "Sandevistan %s: %s"
+msgstr "Sandevistan %s : %s"
+
+#: main.lua
+#, c-format
+msgid "Heat  [%s] %3d%%"
+msgstr "Chaleur [%s] %3d%%"
+
+#: main.lua
+#, c-format
+msgid "Power [%s] %4d kJ"
+msgstr "Énergie [%s] %4d kJ"
+
+#: modinfo.json
+msgid "Sandevistan"
+msgstr "Sandevistan"
+
+#. ~ Description for Sandevistan
+#: modinfo.json
+msgid ""
+"Adds the Sandevistan: a spinal speedware CBM that slows the world to a "
+"crawl.  While it runs your vision turns green, monsters nearly freeze and "
+"you leave a trail of rainbow afterimages.  Every move drains bionic power, "
+"and pushing it too hard overheats the unit: nosebleed, stun and a forced "
+"cooldown.  Both units can be picked at character creation."
+msgstr ""
+"Ajoute le Sandevistan : un MBC speedware spinal qui ralentit le monde "
+"jusqu'à le faire ramper.  Pendant son fonctionnement, votre vision devient "
+"verte, les monstres se figent presque et vous laissez une traînée d'images "
+"rémanentes arc-en-ciel.  Chaque mouvement consomme de l'énergie bionique, et"
+" trop le pousser fait surchauffer l'unité : saignement de nez, "
+"étourdissement et refroidissement forcé.  Les deux unités peuvent être "
+"choisies à la création du personnage."

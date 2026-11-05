@@ -122,6 +122,7 @@
 #include <ostream>
 #include <queue>
 #include <ranges>
+#include <set>
 #include <shared_mutex>
 #include <type_traits>
 #include <unordered_map>
@@ -7323,6 +7324,19 @@ auto map::get_dir_circle(const tripoint_bub_ms& f, const tripoint_bub_ms& t) con
 void map::load(const point_abs_sm& w, const bool update_vehicle, const bool pump_events) {
     funnel_locations_.clear();
     set_abs_sub(w);
+    {
+        // Load or generate the missing omts on the thread pool first, so loadn() below only
+        // has to look them up instead of running mapgen one omt at a time.
+        auto& dim_buf = MAPBUFFER_REGISTRY.get(bound_dimension_);
+        const auto omts = bubble_submaps()
+                        | std::views::transform([&](const auto& p) { return map_local_to_abs(*this, p); })
+                        | std::views::filter([&](const auto& abs) {
+                              return !dim_buf.is_outside_pocket_dimension_bounds(abs);
+                          })
+                        | std::views::transform([](const auto& abs) { return project_to<coords::omt>(abs); })
+                        | std::ranges::to<std::set>();
+        submap_loader.load_omts_parallel(bound_dimension_, omts | std::ranges::to<std::vector>());
+    }
     for (const auto p : bubble_submaps()) {
         loadn(p, update_vehicle);
         MAPBUFFER_REGISTRY.get(bound_dimension_).actualize_submap(map_local_to_abs(*this, p));

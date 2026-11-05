@@ -3112,6 +3112,12 @@ auto game::run_activity_cadence_boundary() -> void
     handle_wait_activity_redraw( true );
 }
 
+auto game::reset_activity_fixed_window_state() -> void
+{
+    next_activity_fixed_window_check_ = calendar::turn_zero;
+    activity_fixed_window_force_normal_turn_ = false;
+}
+
 auto game::try_activity_fixed_window_skip() -> bool
 {
     ZoneScopedN( "activity_fixed_window_try" );

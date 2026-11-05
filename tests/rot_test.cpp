@@ -674,6 +674,20 @@ TEST_CASE("Vehicle storage temperature controls food rot") {
         CHECK(!food->rotten());
     }
 
+    SECTION("clearing nested food from a vehicle not yet on the map does not need the map") {
+        // Mirrors a wreck being placed: parts get smashed before the vehicle is in the map cache.
+        auto fixture = make_storage(vpart_id("minifreezer"), true);
+        add_backpack_with_sashimi_to_vehicle_part(*fixture.veh, fixture.part_index);
+
+        auto detached = get_map().detach_vehicle(fixture.veh);
+        REQUIRE(detached != nullptr);
+        detached->attach();
+        REQUIRE_FALSE(get_map().veh_at(fixture.pos));
+
+        const auto removed = detached->get_items(fixture.part_index).clear();
+        CHECK(removed.size() == 1);
+    }
+
     SECTION("powered fridges catch up partial rot when removed after missed processing") {
         auto fixture = make_storage(vpart_id("minifridge"), true);
         add_sashimi_to_vehicle_part(*fixture.veh, fixture.part_index);

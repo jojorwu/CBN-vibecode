@@ -3892,9 +3892,9 @@ void sfx::end_activity_sounds()
 
 /** Dummy implementations for builds without sound */
 /*@{*/
-void sfx::load_sound_effects( const JsonObject & ) { }
-void sfx::load_sound_effect_preload( const JsonObject & ) { }
-void sfx::load_playlist( const JsonObject & ) { }
+void sfx::load_sound_effects( const JsonObject &jsobj ) { jsobj.allow_omitted_members(); }
+void sfx::load_sound_effect_preload( const JsonObject &jsobj ) { jsobj.allow_omitted_members(); }
+void sfx::load_playlist( const JsonObject &jsobj ) { jsobj.allow_omitted_members(); }
 void sfx::play_variant_sound( const std::string &, const std::string &, int, units::angle, double,
                               double, const bool ) { }
 void sfx::play_variant_sound( const std::string &, const std::string &, int, bool ) { }

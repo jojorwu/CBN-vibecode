@@ -36,6 +36,7 @@
 #include "map/submap_load_manager.h"
 #include "map_helpers.h"
 #include "mapgen/mapgen_constructor.h"
+#include "mongroup.h"
 #include "monster.h"
 #include "npc.h"
 #include "options.h"
@@ -3353,4 +3354,49 @@ TEST_CASE("lua_hook_wiring_mon_effect_removed", "[lua]") {
 
     CHECK(*cre_ptr == static_cast<Creature*>(&mon));
     CHECK(*eff_ptr != nullptr);
+}
+
+TEST_CASE("lua_create_horde_reads_coordinate_options", "[lua]") {
+    clear_all_state();
+    auto lua = make_lua_state();
+
+    auto test_data = lua.create_table();
+    lua.globals()["test_data"] = test_data;
+
+    const auto omt_pos = tripoint_abs_omt(20, 20, 0);
+    const auto target_omt = tripoint_abs_omt(21, 22, 0);
+    const auto sm_pos = project_to<coords::sm>(omt_pos);
+
+    // Coordinates go through the same userdata as any other Lua coordinate, so this
+    // covers the option parsing for `pos` and `target`.
+    const auto res = lua.safe_script(R"(
+        local horde = overmapbuffer.create_horde({
+            type = "GROUP_ZOMBIE",
+            pos = TripointAbsOmt.new(20, 20, 0),
+            target = TripointAbsOmt.new(21, 22, 0),
+            radius = 1,
+            population = 42,
+        })
+        test_data["created"] = horde ~= nil
+    )",
+                                     sol::script_pass_on_error);
+    REQUIRE(res.valid());
+    CHECK(test_data.get<bool>("created"));
+
+    auto& buffer = ACTIVE_OVERMAP_BUFFER;
+    const auto groups = buffer.groups_at(sm_pos);
+    const auto found = std::ranges::find_if(groups, [&](const mongroup* group) {
+        return group->abs_pos == sm_pos && group->type == mongroup_id("GROUP_ZOMBIE");
+    });
+    REQUIRE(found != groups.end());
+
+    auto& horde = **found;
+    CHECK(horde.population == 42);
+    CHECK(horde.horde);
+    CHECK(horde.target == project_to<coords::sm>(target_omt));
+    CHECK(buffer.has_horde(omt_pos));
+
+    // Leave no live horde behind for other cases sharing the world.
+    horde.population = 0;
+    horde.monsters.clear();
 }

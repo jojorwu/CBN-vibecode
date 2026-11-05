@@ -817,7 +817,13 @@ auto item::prepare_for_location_removal() -> void
     }
 
     auto storage_temperature = temperature_flag::TEMP_NORMAL;
-    const auto vehicle_loc = dynamic_cast<vehicle_item_location *>( loc );
+    // Nested contents use the outermost container's vehicle directly: the vehicle may not be
+    // on the map yet (e.g. parts smashed while a wreck is being placed).
+    const auto *root = this;
+    while( const auto *parent = root->parent_item() ) {
+        root = parent;
+    }
+    const auto vehicle_loc = dynamic_cast<vehicle_item_location *>( root->loc );
     if( vehicle_loc != nullptr ) {
         storage_temperature = vehicle_loc->storage_temperature();
     } else if( where() == item_location_type::map ) {

@@ -1034,6 +1034,10 @@ class game : public submap_load_listener
          */
         void win();
 
+        /// Drop cached fixed-window activity-skip state. Production code relies on
+        /// monotonic time; tests rewind the calendar and must clear this cache too.
+        auto reset_activity_fixed_window_state() -> void;
+
     private:
         void perhaps_add_random_npc();
 

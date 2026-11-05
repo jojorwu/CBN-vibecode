@@ -43,6 +43,7 @@ constexpr auto hook_names = std::array
     "on_mapgen_postprocess",
     "on_mission_end",
     "on_mission_start",
+    "on_overmap_generated",
     "on_mon_death",
     "on_mon_effect",
     "on_mon_effect_added",

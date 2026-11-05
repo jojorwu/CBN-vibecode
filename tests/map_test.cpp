@@ -1736,3 +1736,15 @@ TEST_CASE("flammable_fields_can_be_ignited", "[map][field][fire]") {
     CHECK(fire->get_field_intensity() == std::max(2, intensity));
     CHECK(fire->get_field_age() == -10_minutes * intensity);
 }
+
+#include <chrono>
+TEST_CASE("TMP_bench_new_bubble_mapgen", "[.bench]") {
+    clear_all_state();
+    const auto start = std::chrono::steady_clock::now();
+    for (const auto i : std::views::iota(1, 9)) {
+        g->place_player_overmap(tripoint_abs_omt(i * 60, i * 37, 0));
+    }
+    const auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+                        std::chrono::steady_clock::now() - start).count();
+    WARN("BENCH 8 teleports: " << ms << " ms");
+}

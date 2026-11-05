@@ -102,15 +102,22 @@ def run_shard(idx: int, exe: str, names: list[str], workdir: Path, extra: list[s
     cmd = [exe, "-f", str(spec), f"--user-dir={user_dir.as_posix()}", "-D",
            "--durations", "yes", "--rng-seed", "time", *extra]
     # Same as CI (build-scripts/run-linux-test-shards.ts): N shards each spinning up a
-    # software GPU device is slow; the CPU compute path is enough for tests.
+    # software GPU device is slow; the CPU compute path is enough for tests on Linux.
+    # Windows keeps the default gpu_software backend: CPU compute gives wrong
+    # lighting/visibility in the vision tests there.
     env = {**os.environ}
-    env.setdefault("CATA_TEST_COMPUTE_ACCELERATION", "cpu")
+    if os.name != "nt":
+        env.setdefault("CATA_TEST_COMPUTE_ACCELERATION", "cpu")
     start = time.monotonic()
     proc = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace", env=env)
     return idx, proc.returncode, proc.stdout + proc.stderr, time.monotonic() - start
 
 
 def main() -> int:
+    # Test output is UTF-8; a cp1251 console would raise UnicodeEncodeError while
+    # printing failure details, losing the shard result.
+    for stream in (sys.stdout, sys.stderr):
+        stream.reconfigure(encoding="utf-8", errors="replace")
     argv = sys.argv[1:]
     extra: list[str] = []
     if "--" in argv:

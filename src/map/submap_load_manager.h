@@ -266,6 +266,17 @@ public:
     /** Unregister a listener.  No-op if not registered. */
     void remove_listener(submap_load_listener* listener);
 
+    /**
+     * Load or generate the given omt z-levels of one dimension and wait for them.
+     * Disk loads and worker-safe mapgen run on the thread pool; Lua mapgen and
+     * partially loaded z-levels finish on the main thread.  Runs the deferred
+     * mapgen hooks and pillar post passes afterwards.  Main thread only.
+     *
+     * @return Number of generated omt z-levels.
+     */
+    auto load_omts_parallel(const dimension_id& dim_id, const std::vector<tripoint_abs_omt>& omts)
+        -> std::size_t;
+
 private:
     using desired_key = std::pair<dimension_id, point_abs_sm>;
     using omt_key = std::pair<dimension_id, tripoint_abs_omt>;

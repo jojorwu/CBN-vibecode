@@ -23,6 +23,7 @@
 #include <cstdint>
 #include <cstdlib>
 #include <future>
+#include <map>
 #include <ranges>
 #include <set>
 #include <unordered_set>
@@ -415,6 +416,41 @@ auto submap_load_manager::finish_lazy_omt_job(const omt_key& key) -> bool {
         run_deferred_mapgen_hooks_and_omt_post_passes(generated_omt_columns);
     }
     return generated;
+}
+
+auto submap_load_manager::load_omts_parallel(
+    const dimension_id& dim_id, const std::vector<tripoint_abs_omt>& omts) -> std::size_t {
+    ZoneScopedN("slm_load_omts_parallel");
+    auto generated_zlevels = std::size_t{0};
+    auto generated_omt_columns = horizontal_omt_set{};
+    const auto note_generated = [&](const omt_key& key) {
+        ++generated_zlevels;
+        generated_omt_columns.emplace(key.first, key.second.xy());
+    };
+    // Jobs start one by one; already loaded z-levels and Lua mapgen finish synchronously.
+    auto in_flight = std::vector<omt_key>{};
+    for (const auto& omt : omts) {
+        const auto key = omt_key{dim_id, omt};
+        finish_lazy_omt_job(key);
+        if (start_lazy_omt_job(key).generated) { note_generated(key); }
+        if (lazy_omt_futures_.contains(key)) { in_flight.push_back(key); }
+    }
+    auto& mb = MAPBUFFER_REGISTRY.get(dim_id);
+    for (const auto& key : in_flight) {
+        const auto it = lazy_omt_futures_.find(key);
+        auto result = complete_lazy_omt_result_on_main_thread(key, it->second.get());
+        lazy_omt_futures_.erase(it);
+        auto generated = apply_lazy_omt_result(key, result);
+        // Workers skip partially loaded z-levels; finish them here (runs synchronously).
+        if (!is_omt_zlevel_loaded(mb, key.second) && is_any_omt_zlevel_loaded(mb, key.second)) {
+            generated = start_lazy_omt_job(key).generated || generated;
+        }
+        if (generated) { note_generated(key); }
+    }
+    if (!generated_omt_columns.empty()) {
+        run_deferred_mapgen_hooks_and_omt_post_passes(generated_omt_columns);
+    }
+    return generated_zlevels;
 }
 
 auto submap_load_manager::reap_lazy_omt_jobs() -> void {
@@ -884,49 +920,22 @@ auto submap_load_manager::update(const bool defer_lazy_border_work) -> void {
         });
     }
 
-    // ---- Step 2: synchronous mapgen on the main thread ----
-    // generate_omt() may invoke Lua mapgen.
-    // Lua is not reentrant, so this must always run on the main thread.
-    // Skip omts already fully resident: preload_omt loaded them from disk or
-    // the pending_writes cache, so no generation is needed.
+    // ---- Step 2: parallel mapgen for newly-simulated omts ----
     auto generated_zlevels = std::size_t{0};
-    auto generated_omt_columns = horizontal_omt_set{};
     {
         ZoneScopedN("slm_generate_new_omts");
+        auto omts_by_dim = std::map<dimension_id, std::vector<tripoint_abs_omt>>{};
         for (const auto& [dim_id, omt_xy] : new_omts) {
-            auto& mb = MAPBUFFER_REGISTRY.get(dim_id);
+            auto& omts = omts_by_dim[dim_id];
             for (const auto z : std::views::iota(-OVERMAP_DEPTH, OVERMAP_HEIGHT + 1)) {
-                const auto omt_addr = tripoint_abs_omt{omt_xy, z};
-                const auto sm_base = project_to<coords::sm>(omt_addr);
-                const auto all_loaded =
-                    mb.lookup_submap_in_memory(sm_base)
-                    && mb.lookup_submap_in_memory((sm_base + point_east))
-                    && mb.lookup_submap_in_memory((sm_base + point_south))
-                    && mb.lookup_submap_in_memory((sm_base + point_south_east));
-                if (!all_loaded) {
-                    const auto result = mb.generate_omt(
-                        omt_addr,
-                        {
-                            .defer_postprocess_hooks = true,
-                            .worker_safe = false,
-                            .use_selected_mapgen = false,
-                            .selected_mapgen = nullptr,
-                        });
-                    if (result.is_generated()) {
-                        ++generated_zlevels;
-                        generated_omt_columns.emplace(dim_id, omt_xy);
-                    }
-                }
+                omts.emplace_back(omt_xy, z);
             }
+        }
+        for (const auto& [dim_id, omts] : omts_by_dim) {
+            generated_zlevels += load_omts_parallel(dim_id, omts);
         }
     }
     TracyPlot("New Sim OMT Z Generated", static_cast<int64_t>(generated_zlevels));
-
-    // Drain Lua postprocess hooks queued by mapgen above.
-    {
-        ZoneScopedN("slm_mapgen_hooks_sim");
-        run_deferred_mapgen_hooks_and_omt_post_passes(generated_omt_columns);
-    }
 
     // ---- Listener notifications (simulated set only) ----
     // The simulated set is 2-D; fire for every z-level when a horizontal

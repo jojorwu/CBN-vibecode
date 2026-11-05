@@ -1075,6 +1075,15 @@ void cata::detail::reg_hooks_examples( sol::state &lua )
     DOC( "* `when` (TimePoint): The current time (for time-based effects).  " );
     DOC_PARAMS( "params" );
     luna::set_fx( lib, "on_mapgen_postprocess", []( const sol::table & ) {} );
+    DOC( "Called once for each newly generated overmap (not for overmaps loaded from a save), " );
+    DOC( "after rivers, cities, roads and specials are placed. Changes are saved with the overmap. " );
+    DOC( "The hook receives table keys: " );
+    DOC( "* `overmap` (Overmap): the overmap to edit, using overmap-local coordinates. " );
+    DOC( "* `pos` (PointAbsOm): absolute position of the overmap. " );
+    DOC( "* `region` (string): id of its region_settings. " );
+    DOC( "* `dimension` (string): id of its dimension. " );
+    DOC_PARAMS( "params" );
+    luna::set_fx( lib, "on_overmap_generated", []( const sol::table & ) {} );
 
     DOC( "Called when checking which mapgen ids are used, during mapgen consistency checks.  " );
     DOC( "Insert mapgen ids that are only used from Lua to suppress the \"not used by anything\" error.  " );
